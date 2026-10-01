@@ -1,0 +1,36 @@
+name: Judge Multi-Language Code
+on: workflow_dispatch
+
+jobs:
+  judge:
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.21'
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0'
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+      - name: Install TypeScript
+        run: npm install -g typescript ts-node
+      - name: Run judge shard
+        run: python3 judge_shard.py --shard ${{ matrix.shard }} --total 20
+      - uses: actions/upload-artifact@v4
+        with:
+          name: results-shard-${{ matrix.shard }}
+          path: output_shard_*.jsonl
