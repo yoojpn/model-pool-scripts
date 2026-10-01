@@ -109,7 +109,10 @@ for lang_key, url in URLS.items():
         data = resp.read().decode("utf-8")
     for line in data.splitlines():
         if line.strip():
-            e = json.loads(line)
+            try:
+                e = json.loads(line)
+            except Exception:
+                continue  # 不正な形式の行はスキップする
             all_entries.append((lang_key, e))
 
 print(f"全体件数: {len(all_entries)}", flush=True)
