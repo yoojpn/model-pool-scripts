@@ -3,6 +3,7 @@ import json, subprocess, sys, os, shutil, tempfile, re, argparse, urllib.request
 parser = argparse.ArgumentParser()
 parser.add_argument("--shard", type=int, required=True)
 parser.add_argument("--total", type=int, required=True)
+parser.add_argument("--orig_shard18_half", type=int, default=-1)  # 0か1を指定すると、旧shard18(total=20)を半分に絞る
 args = parser.parse_args()
 
 URLS = {
@@ -116,8 +117,16 @@ for lang_key, url in URLS.items():
             all_entries.append((lang_key, e))
 
 print(f"全体件数: {len(all_entries)}", flush=True)
-my_shard = [item for i, item in enumerate(all_entries) if i % args.total == args.shard]
-print(f"このシャード({args.shard})の件数: {len(my_shard)}", flush=True)
+if args.orig_shard18_half >= 0:
+    # 旧shard18(20分割時の18番目)だけを取り出し、さらに半分に分割する
+    orig18 = [item for i, item in enumerate(all_entries) if i % 20 == 18]
+    mid = len(orig18) // 2
+    my_shard = orig18[:mid] if args.orig_shard18_half == 0 else orig18[mid:]
+    shard_label = f"18-half{args.orig_shard18_half}"
+else:
+    my_shard = [item for i, item in enumerate(all_entries) if i % args.total == args.shard]
+    shard_label = str(args.shard)
+print(f"このシャード({shard_label})の件数: {len(my_shard)}", flush=True)
 
 passed_results = []
 for i, (lang_key, e) in enumerate(my_shard):
@@ -138,8 +147,8 @@ for i, (lang_key, e) in enumerate(my_shard):
     if (i + 1) % 100 == 0:
         print(f"  {i+1}/{len(my_shard)}件処理済み", flush=True)
 
-with open(f"output_shard_{args.shard}.jsonl", "w") as f:
+with open(f"output_shard_{shard_label}.jsonl", "w") as f:
     for r in passed_results:
         f.write(json.dumps(r, ensure_ascii=False) + "\n")
 
-print(f"シャード{args.shard}完了: {len(passed_results)}/{len(my_shard)}件合格", flush=True)
+print(f"シャード{shard_label}完了: {len(passed_results)}/{len(my_shard)}件合格", flush=True)
