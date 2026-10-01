@@ -6,7 +6,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        half: [0, 1]
+        quarter: [0, 1, 2, 3]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -29,8 +29,8 @@ jobs:
       - name: Install TypeScript
         run: npm install -g typescript ts-node
       - name: Run judge shard
-        run: python3 judge_shard.py --shard 0 --total 1 --orig_shard18_half ${{ matrix.half }}
+        run: python3 judge_shard.py --shard 0 --total 1 --orig_shard18_half ${{ matrix.quarter }}
       - uses: actions/upload-artifact@v4
         with:
-          name: results-shard18-half-${{ matrix.half }}
+          name: results-shard18-quarter-${{ matrix.quarter }}
           path: output_shard_*.jsonl

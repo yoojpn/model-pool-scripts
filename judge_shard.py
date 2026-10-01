@@ -118,11 +118,14 @@ for lang_key, url in URLS.items():
 
 print(f"全体件数: {len(all_entries)}", flush=True)
 if args.orig_shard18_half >= 0:
-    # 旧shard18(20分割時の18番目)だけを取り出し、さらに半分に分割する
-    orig18 = [item for i, item in enumerate(all_entries) if i % 20 == 18]
-    mid = len(orig18) // 2
-    my_shard = orig18[:mid] if args.orig_shard18_half == 0 else orig18[mid:]
-    shard_label = f"18-half{args.orig_shard18_half}"
+    # 旧shard18(半分=1050件の、さらに半分=525件分)を、4分割する
+    orig18_half1 = [item for i, item in enumerate(all_entries) if i % 20 == 18][525:]  # halfだった分の後半
+    n = len(orig18_half1)
+    q = n // 4
+    boundaries = [0, q, q*2, q*3, n]
+    i0, i1 = boundaries[args.orig_shard18_half], boundaries[args.orig_shard18_half + 1]
+    my_shard = orig18_half1[i0:i1]
+    shard_label = f"18-half1-q{args.orig_shard18_half}"
 else:
     my_shard = [item for i, item in enumerate(all_entries) if i % args.total == args.shard]
     shard_label = str(args.shard)
