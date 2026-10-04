@@ -1,0 +1,33 @@
+name: Bug judge pass4
+on: workflow_dispatch
+jobs:
+  judge:
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0,1,2,3]
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.21'
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0'
+      - uses: dtolnay/rust-toolchain@stable
+      - run: npm install -g typescript@5.4.5 ts-node@10.9.2 @types/node@20
+      - run: BUG_INPUT=bug_input_p4.jsonl.gz python3 bug_judge.py --shard ${{ matrix.shard }} --total 4
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bugjudged-p4-${{ matrix.shard }}
+          path: bugjudged_*.jsonl
