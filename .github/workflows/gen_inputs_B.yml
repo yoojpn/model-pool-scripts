@@ -1,0 +1,17 @@
+name: Gen inputs (B)
+on: workflow_dispatch
+jobs:
+  gen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - run: cp ci_think/*.py /tmp/ && cp ci_b/pool_sel.json /tmp/pool_sel.json && cp ci_b/gen_inputs_job.py /tmp/
+      - env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+        run: cd /tmp && python3 gen_inputs_job.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: inputs-B
+          path: /tmp/inputs_B.jsonl
