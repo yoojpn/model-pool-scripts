@@ -1,0 +1,35 @@
+name: Think generation job
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'think_pipeline mode (mathhard etc.)'
+        required: true
+        default: 'mathhard'
+      conc:
+        description: 'concurrency'
+        required: true
+        default: '30'
+      limit:
+        description: 'cost limit USD'
+        required: true
+        default: '0.8'
+jobs:
+  think:
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          mkdir -p /tmp/work && cp ci_think/*.py /tmp/work/ && cp ci_think/data/* /tmp/work/
+          cp ci_think/data/mathhard_sol.jsonl /tmp/mathhard_sol.jsonl
+          cp ci_think/*.py /tmp/
+      - name: Run
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+        run: cd /tmp && python3 think_pipeline.py ${{ inputs.mode }} ${{ inputs.conc }} ${{ inputs.limit }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: think-${{ inputs.mode }}
+          path: /tmp/think_out_${{ inputs.mode }}.jsonl
