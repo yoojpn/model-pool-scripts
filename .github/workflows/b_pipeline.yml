@@ -1,0 +1,114 @@
+name: B pipeline (translate -> judge -> repair -> judge -> think)
+on:
+  workflow_dispatch:
+    inputs:
+      limit_tasks:
+        description: '課題数の上限(0=全部)'
+        required: true
+        default: '0'
+      shards:
+        description: '判定のシャード数は固定(下記matrix)'
+        required: false
+        default: '20'
+env:
+  B_LIMIT_TASKS: ${{ inputs.limit_tasks }}
+jobs:
+  gen1:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - run: cp ci_think/*.py ci_b/*.py /tmp/ && cp ci_b/new_tasks_B.json /tmp/new_tasks_B.json
+      - env: { OPENROUTER_API_KEY: "${{ secrets.OPENROUTER_API_KEY }}" }
+        run: cd /tmp && python3 b_translate.py && python3 b_assemble.py to_gz /tmp/B_gen_r1.jsonl /tmp/gen_input_B1.jsonl.gz
+      - uses: actions/upload-artifact@v4
+        with: { name: B-gen1, path: "/tmp/B_gen_r1.jsonl\n/tmp/gen_input_B1.jsonl.gz" }
+  judge1:
+    needs: gen1
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19]
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with: { name: B-gen1, path: /tmp/in }
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '17' }
+      - uses: actions/setup-go@v5
+        with: { go-version: '1.21' }
+      - uses: actions/setup-dotnet@v4
+        with: { dotnet-version: '8.0' }
+      - uses: dtolnay/rust-toolchain@stable
+      - run: npm install -g typescript@5.4.5 ts-node@10.9.2 @types/node@20
+      - run: GEN_INPUT=/tmp/in/gen_input_B1.jsonl.gz python3 judge_v6.py --shard ${{ matrix.shard }} --total 20
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: "B-judged1-${{ matrix.shard }}", path: "judged_*.jsonl" }
+  gen2:
+    needs: judge1
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with: { pattern: "B-judged1-*", path: /tmp/j1 }
+      - uses: actions/download-artifact@v4
+        with: { name: B-gen1, path: /tmp }
+      - run: |
+          cp ci_think/*.py ci_b/*.py /tmp/ && cp ci_b/new_tasks_B.json /tmp/new_tasks_B.json
+          cd /tmp && i=0; for f in j1/*/judged_*.jsonl; do cp "$f" "/tmp/B_judged1_$i.jsonl"; i=$((i+1)); done
+      - env: { OPENROUTER_API_KEY: "${{ secrets.OPENROUTER_API_KEY }}" }
+        run: cd /tmp && python3 b_repair.py && python3 b_assemble.py to_gz /tmp/B_gen_r2.jsonl /tmp/gen_input_B2.jsonl.gz
+      - uses: actions/upload-artifact@v4
+        with: { name: B-gen2, path: "/tmp/B_gen_r2.jsonl\n/tmp/gen_input_B2.jsonl.gz" }
+  judge2:
+    needs: gen2
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0,1,2,3,4,5,6,7,8,9]
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with: { name: B-gen2, path: /tmp/in }
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '17' }
+      - uses: actions/setup-go@v5
+        with: { go-version: '1.21' }
+      - uses: actions/setup-dotnet@v4
+        with: { dotnet-version: '8.0' }
+      - uses: dtolnay/rust-toolchain@stable
+      - run: npm install -g typescript@5.4.5 ts-node@10.9.2 @types/node@20
+      - run: GEN_INPUT=/tmp/in/gen_input_B2.jsonl.gz python3 judge_v6.py --shard ${{ matrix.shard }} --total 10
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: "B-judged2-${{ matrix.shard }}", path: "judged_*.jsonl" }
+  think:
+    needs: judge2
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with: { pattern: "B-judged*", path: /tmp/jj }
+      - run: |
+          cp ci_think/*.py ci_b/*.py /tmp/ && cp ci_b/new_tasks_B.json /tmp/new_tasks_B.json
+          cd /tmp && python3 b_assemble.py merge_judged "/tmp/jj/B-judged1-*/judged_*.jsonl" /tmp/B_all_judged1.jsonl
+          python3 b_assemble.py merge_judged "/tmp/jj/B-judged2-*/judged_*.jsonl" /tmp/B_all_judged2.jsonl
+          python3 b_assemble.py think_items /tmp/B_all_judged1.jsonl /tmp/B_all_judged2.jsonl /tmp/B_pass.json
+      - env: { OPENROUTER_API_KEY: "${{ secrets.OPENROUTER_API_KEY }}" }
+        run: cd /tmp && python3 think_pipeline.py writeB 30 1.2
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: B-final
+          path: "/tmp/think_out_writeB.jsonl\n/tmp/B_all_judged1.jsonl\n/tmp/B_all_judged2.jsonl\n/tmp/B_pass.json"
