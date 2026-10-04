@@ -119,6 +119,9 @@ def load_items():
         for r in json.load(open('/tmp/B_pass.json')):
             ti=r['tid']-1143; t=tasksB[ti]
             out.append({"key":f"ml{r['tid']}_{r['lang']}","domain":"multi/"+r['lang'],"lang":r['lang'],"instruction":t['instruction'],"code":r['code']})
+    elif MODE=='fnform':
+        for r in json.load(open('/tmp/FN_pass.json')):
+            out.append({"key":f"fn{r['tid']}_{r['lang']}","domain":"function/"+r['lang'],"lang":r['lang'],"instruction":r['instruction']+"\n\n関数のシグネチャ: "+r['sig'],"code":r['fn']})
     elif MODE=='pystdio':
         tasks=json.load(open('/tmp/new_tasks.json'))
         for r in json.load(open('/tmp/pystdio_all.json')):
