@@ -26,6 +26,10 @@ for n,e in enumerate(entries):
             exp=pr['expected_stdout'].strip()
             if rc!=0: st='crash_or_compile' if i==0 else 'crash_later'; fail={"idx":i,"stdin":pr['stdin'],"expected":exp,"stderr":se[-300:]}; break
             if so.strip()!=exp: st='ok'; fail={"idx":i,"stdin":pr['stdin'],"expected":exp,"actual":so.strip()[:300]}; break
+        if st=='ok':   # 正解コードが同じ全テスト(最大8件)を通ることを確認(元が間違っているテストでの失敗を除外)
+            for pr in pairs:
+                so,se,rc=run_any(lang,e['fixed'],pr['stdin'])
+                if rc!=0 or so.strip()!=pr['expected_stdout'].strip(): st='fixed_fails'; break
         rec['status']=st; rec['fail']=fail
     cnt[rec['status']]=cnt.get(rec['status'],0)+1
     out.write(json.dumps(rec,ensure_ascii=False)+"\n")
