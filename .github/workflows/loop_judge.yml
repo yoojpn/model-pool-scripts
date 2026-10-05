@@ -1,0 +1,30 @@
+name: Loop judge
+on:
+  workflow_dispatch:
+    inputs:
+      input_url: { description: 'gen_input.jsonl.gz の署名URL', required: true }
+jobs:
+  judge:
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19]
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '17' }
+      - uses: actions/setup-go@v5
+        with: { go-version: '1.21' }
+      - uses: actions/setup-dotnet@v4
+        with: { dotnet-version: '8.0' }
+      - uses: dtolnay/rust-toolchain@stable
+      - run: npm install -g typescript@5.4.5 ts-node@10.9.2 @types/node@20
+      - run: curl -sfL --retry 3 -o gen_input.jsonl.gz "${{ inputs.input_url }}"
+      - run: python3 ci_loop/loop_judge_run.py ${{ matrix.shard }} 20 gen_input.jsonl.gz
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: "LOOP-judged-${{ matrix.shard }}", path: "judged_py_*.jsonl\njudged_other_*.jsonl" }
