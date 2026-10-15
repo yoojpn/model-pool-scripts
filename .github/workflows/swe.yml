@@ -49,8 +49,13 @@ jobs:
         run: |
           cd runner && (test -d node_modules || true)
           cd ..
-          CTR_PY=/opt/miniconda3/bin/python3 node runner/run_task.mjs '${{ matrix.iid }}' ctr
-          docker exec ctr bash -c "cd /testbed && git add -A -N . 2>/dev/null; git diff" > out/model.diff || true
+          mkdir -p out
+          if [ -f run/gold ]; then
+            python -c "import json;print(next(t for t in json.load(open('run/tasks.json')) if t['instance_id']=='${{ matrix.iid }}')['patch'],end='')" > out/model.diff
+          else
+            CTR_PY=/opt/miniconda3/bin/python3 node runner/run_task.mjs '${{ matrix.iid }}' ctr
+            docker exec ctr bash -c "cd /testbed && git add -A -N . 2>/dev/null; git diff" > out/model.diff || true
+          fi
           wc -c out/model.diff
           python - <<'PY'
           import json
