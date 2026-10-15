@@ -1,0 +1,101 @@
+name: swe
+on:
+  push:
+    branches: ['run/**']
+    paths: ['run/go']
+permissions:
+  contents: write
+jobs:
+  select:
+    runs-on: ubuntu-latest
+    outputs:
+      ids: ${{ steps.s.outputs.ids }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip install datasets
+      - id: s
+        run: |
+          N=$(cat run/go | tr -d '[:space:]'); N=${N:-20}
+          IDS=$(python runner/select.py 20261016 $N)
+          echo "ids=$IDS" >> $GITHUB_OUTPUT
+          echo "$IDS"
+      - uses: actions/upload-artifact@v4
+        with: { name: tasks, path: run/tasks.json }
+  solve:
+    needs: select
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        iid: ${{ fromJson(needs.select.outputs.ids) }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with: { name: tasks, path: run }
+      - run: pip install swebench
+      - name: start container
+        run: |
+          set -x
+          IMG="swebench/sweb.eval.x86_64.$(echo '${{ matrix.iid }}' | sed 's/__/_1776_/'):latest"
+          docker pull "$IMG"
+          docker run -d --name ctr --network none "$IMG" sleep infinity
+          docker cp runner/toolrun_ctr.py ctr:/toolrun_ctr.py
+          # scrub future history: keep only commits reachable from base_commit state
+          docker exec ctr bash -c "cd /testbed && git status --short | head -3; git tag | xargs -r git tag -d >/dev/null; for b in \$(git branch --format='%(refname:short)'); do git branch -D \$b >/dev/null 2>&1; done; git remote | xargs -r -n1 git remote remove; git reflog expire --expire=now --all; git gc --prune=now -q; git log --oneline | head -2"
+          docker exec ctr bash -c "ls /opt/miniconda3/bin/python3 >/dev/null && echo conda-ok"
+      - name: solve
+        run: |
+          cd runner && (test -d node_modules || true)
+          cd ..
+          CTR_PY=/opt/miniconda3/bin/python3 node runner/run_task.mjs '${{ matrix.iid }}' ctr
+          docker exec ctr bash -c "cd /testbed && git add -A -N . 2>/dev/null; git diff" > out/model.diff || true
+          wc -c out/model.diff
+          python - <<'PY'
+          import json
+          d=open('out/model.diff').read()
+          json.dump([{"instance_id":"${{ matrix.iid }}","model_name_or_path":"gemma4-e2b-agent","model_patch":d}], open('out/preds.json','w'))
+          PY
+      - name: official evaluation
+        run: |
+          mkdir -p out/eval
+          python -m swebench.harness.run_evaluation --dataset_name princeton-nlp/SWE-bench_Verified --predictions_path out/preds.json --max_workers 1 --run_id r --instance_ids '${{ matrix.iid }}' --namespace swebench --cache_level instance 2>&1 | tail -20
+          cat gemma4-e2b-agent.r.json 2>/dev/null || true
+          cp gemma4-e2b-agent.r.json out/report.json 2>/dev/null || true
+          find logs/run_evaluation -name run_instance.log -exec cp {} out/run_instance.log \; || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: 'res-${{ matrix.iid }}', path: out }
+  summary:
+    needs: solve
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with: { pattern: 'res-*', path: all }
+      - name: collect
+        run: |
+          python - <<'PY'
+          import json,glob,os
+          rows=[]
+          for d in sorted(glob.glob('all/res-*')):
+              iid=d.split('res-',1)[1]; r={'id':iid,'resolved':False}
+              try:
+                  rep=json.load(open(d+'/report.json')); r['resolved']=iid in rep.get('resolved_ids',[]); r['report']={k:rep.get(k) for k in ('completed_instances','resolved_instances','error_instances','empty_patch_instances')}
+              except Exception as e: r['report']=str(e)
+              try:
+                  m=json.load(open(d+'/meta.json')); r.update({k:m.get(k) for k in ('steps','toolCalls','toolFail','err')}); r['final']=(m.get('final') or '')[:300]
+              except Exception as e: r['meta']=str(e)
+              try: r['patch_bytes']=os.path.getsize(d+'/model.diff')
+              except Exception: pass
+              rows.append(r)
+          os.makedirs('results',exist_ok=True)
+          json.dump(rows,open('results/summary.json','w'),ensure_ascii=False,indent=1)
+          print(sum(r['resolved'] for r in rows),'/',len(rows))
+          PY
+          git config user.name swe-runner; git config user.email swe@example.invalid
+          git add results/summary.json; git commit -qm "results ${{ github.run_id }}" || true
+          git pull -q --rebase origin ${{ github.ref_name }} || true
+          git push -q origin HEAD:${{ github.ref_name }}
