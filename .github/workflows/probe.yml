@@ -1,7 +1,25 @@
 name: probe
-on: workflow_dispatch
+on:
+  push:
+    branches: [swe-eval]
+    paths: ['.github/workflows/probe.yml', 'probe/**']
+permissions:
+  contents: write
 jobs:
-  p:
+  probe:
     runs-on: ubuntu-latest
     steps:
-      - run: echo hi
+      - uses: actions/checkout@v4
+      - name: collect info
+        run: |
+          mkdir -p results
+          { echo "date: $(date -u)"; nproc; free -g | head -2; df -h / /mnt | tail -2; docker --version; python3 --version; node --version;
+            echo "--- colab reach:"; } > results/probe.txt 2>&1
+          if [ -f probe/infer.json ]; then
+            URL=$(python3 -c "import json;print(json.load(open('probe/infer.json'))['url'])")
+            curl -s -m 20 -o /dev/null -w "infer http %{http_code}\n" "$URL/health" >> results/probe.txt 2>&1 || echo "infer unreachable" >> results/probe.txt
+          fi
+      - name: commit results
+        run: |
+          git config user.name "swe-runner"; git config user.email "runner@users.noreply.github.com"
+          git add results; git commit -m "probe results" ; git push
