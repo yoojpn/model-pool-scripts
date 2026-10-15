@@ -1,13 +1,16 @@
 [
  {
+  "id": "scikit-learn__scikit-learn-13124",
+  "resolved": false,
+  "report": "[Errno 2] No such file or directory: 'all/res-scikit-learn__scikit-learn-13124/report.json'",
+  "meta": "[Errno 2] No such file or directory: 'all/res-scikit-learn__scikit-learn-13124/meta.json'",
+  "patch_bytes": 1078
+ },
+ {
   "id": "sphinx-doc__sphinx-8548",
   "resolved": false,
   "report": "[Errno 2] No such file or directory: 'all/res-sphinx-doc__sphinx-8548/report.json'",
-  "steps": 6,
-  "toolCalls": 5,
-  "toolFail": 3,
-  "err": "",
-  "final": "I am unable to read or edit the file `sphinx-doc/sphinx/autodoc/autodoc.py` because the file does not exist in the current sandbox environment, despite the plan suggesting it should. Since I cannot proceed with the suggested fix without access to the file, and I cannot create the file from scratch b",
-  "patch_bytes": 0
+  "meta": "[Errno 2] No such file or directory: 'all/res-sphinx-doc__sphinx-8548/meta.json'",
+  "patch_bytes": 3907
  }
 ]
