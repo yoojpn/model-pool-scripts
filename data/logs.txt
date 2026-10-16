@@ -1,0 +1,140 @@
+== all/gen-0
+Generating train split:   0%|          | 0/19008 [00:00<?, ? examples/s]Generating train split:  26%|██▋       | 5000/19008 [00:00<00:00, 29935.28 examples/s]Generating train split:  89%|████████▉ | 17000/19008 [00:00<00:00, 70636.08 examples/s]Generating train split: 100%|██████████| 19008/19008 [00:00<00:00, 68137.12 examples/s]
+pandas-dev/pandas train rows 5049
+built 110
+== all/gen-1
+Generating train split:   0%|          | 0/19008 [00:00<?, ? examples/s]Generating train split:  26%|██▋       | 5000/19008 [00:00<00:00, 21848.59 examples/s]Generating train split:  79%|███████▉  | 15000/19008 [00:00<00:00, 48692.80 examples/s]Generating train split: 100%|██████████| 19008/19008 [00:00<00:00, 49419.85 examples/s]
+Qiskit/qiskit train rows 1406
+built 110
+== all/gen-10
+Generating train split:   0%|          | 0/19008 [00:00<?, ? examples/s]Generating train split:  26%|██▋       | 5000/19008 [00:00<00:00, 16902.73 examples/s]Generating train split:  79%|███████▉  | 15000/19008 [00:00<00:00, 39380.35 examples/s]Generating train split: 100%|██████████| 19008/19008 [00:00<00:00, 40010.62 examples/s]
+conda/conda train rows 629
+built 110
+== all/gen-11
+Generating train split:   0%|          | 0/19008 [00:00<?, ? examples/s]Generating train split:  26%|██▋       | 5000/19008 [00:00<00:00, 21976.94 examples/s]Generating train split:  79%|███████▉  | 15000/19008 [00:00<00:00, 49372.00 examples/s]Generating train split: 100%|██████████| 19008/19008 [00:00<00:00, 50116.94 examples/s]
+docker/compose train rows 597
+built 110
+== all/gen-12
+Generating train split:   0%|          | 0/19008 [00:00<?, ? examples/s]Generating train split:  26%|██▋       | 5000/19008 [00:00<00:00, 26015.83 examples/s]Generating train split:  84%|████████▍ | 16000/19008 [00:00<00:00, 60970.49 examples/s]Generating train split: 100%|██████████| 19008/19008 [00:00<00:00, 59508.55 examples/s]
+apache/airflow train rows 473
+built 110
+== all/gen-13
+Generating train split:   0%|          | 0/19008 [00:00<?, ? examples/s]Generating train split:  26%|██▋       | 5000/19008 [00:00<00:00, 20555.98 examples/s]Generating train split:  79%|███████▉  | 15000/19008 [00:00<00:00, 45826.50 examples/s]Generating train split: 100%|██████████| 19008/19008 [00:00<00:00, 46378.90 examples/s]
+wagtail/wagtail train rows 414
+built 110
+== all/gen-14
+Generating train split:   0%|          | 0/19008 [00:00<?, ? examples/s]Generating train split:  26%|██▋       | 5000/19008 [00:00<00:00, 21972.48 examples/s]Generating train split:  79%|███████▉  | 15000/19008 [00:00<00:00, 48788.90 examples/s]Generating train split: 100%|██████████| 19008/19008 [00:00<00:00, 49661.90 examples/s]
+PrefectHQ/prefect train rows 407
+built 58
+== all/gen-15
+Generating train split:   0%|          | 0/19008 [00:00<?, ? examples/s]Generating train split:  26%|██▋       | 5000/19008 [00:00<00:00, 22286.13 examples/s]Generating train split:  79%|███████▉  | 15000/19008 [00:00<00:00, 49439.91 examples/s]Generating train split: 100%|██████████| 19008/19008 [00:00<00:00, 50202.43 examples/s]
+Lightning-AI/lightning train rows 377
+built 110
+== all/gen-16
+Generating train split:   0%|          | 0/19008 [00:00<?, ? examples/s]Generating train split:  26%|██▋       | 5000/19008 [00:00<00:00, 21519.49 examples/s]Generating train split:  79%|███████▉  | 15000/19008 [00:00<00:00, 47387.78 examples/s]Generating train split: 100%|██████████| 19008/19008 [00:00<00:00, 48370.77 examples/s]
+pyca/cryptography train rows 344
+built 91
+== all/gen-17
+Generating train split:   0%|          | 0/19008 [00:00<?, ? examples/s]Generating train split:  26%|██▋       | 5000/19008 [00:00<00:00, 22038.47 examples/s]Generating train split:  79%|███████▉  | 15000/19008 [00:00<00:00, 48645.24 examples/s]Generating train split: 100%|██████████| 19008/19008 [00:00<00:00, 49420.80 examples/s]
+ray-project/ray train rows 342
+built 88
+== all/gen-18
+Generating train split:   0%|          | 0/19008 [00:00<?, ? examples/s]Generating train split:  26%|██▋       | 5000/19008 [00:00<00:00, 22406.09 examples/s]Generating train split:  79%|███████▉  | 15000/19008 [00:00<00:00, 49110.61 examples/s]Generating train split: 100%|██████████| 19008/19008 [00:00<00:00, 50076.27 examples/s]
+google/jax train rows 328
+built 110
+== all/gen-19
+Generating train split:   0%|          | 0/19008 [00:00<?, ? examples/s]Generating train split:  26%|██▋       | 5000/19008 [00:00<00:00, 22245.50 examples/s]Generating train split:  79%|███████▉  | 15000/19008 [00:00<00:00, 49641.27 examples/s]Generating train split: 100%|██████████| 19008/19008 [00:00<00:00, 50164.72 examples/s]
+ytdl-org/youtube-dl train rows 312
+built 65
+== all/gen-2
+Generating train split:   0%|          | 0/19008 [00:00<?, ? examples/s]Generating train split:  26%|██▋       | 5000/19008 [00:00<00:00, 17814.35 examples/s]Generating train split:  84%|████████▍ | 16000/19008 [00:00<00:00, 45973.45 examples/s]Generating train split: 100%|██████████| 19008/19008 [00:00<00:00, 44391.39 examples/s]
+huggingface/transformers train rows 1058
+built 110
+== all/gen-20
+Generating train split:   0%|          | 0/19008 [00:00<?, ? examples/s]Generating train split:  26%|██▋       | 5000/19008 [00:00<00:00, 25855.97 examples/s]Generating train split:  84%|████████▍ | 16000/19008 [00:00<00:00, 61079.75 examples/s]Generating train split: 100%|██████████| 19008/19008 [00:00<00:00, 59384.26 examples/s]
+celery/celery train rows 250
+built 65
+== all/gen-21
+Generating train split:   0%|          | 0/19008 [00:00<?, ? examples/s]Generating train split:  26%|██▋       | 5000/19008 [00:00<00:00, 22078.70 examples/s]Generating train split:  79%|███████▉  | 15000/19008 [00:00<00:00, 48962.01 examples/s]Generating train split: 100%|██████████| 19008/19008 [00:00<00:00, 49852.32 examples/s]
+jupyterlab/jupyterlab train rows 201
+built 51
+== all/gen-22
+Generating train split:   0%|          | 0/19008 [00:00<?, ? examples/s]Generating train split:  26%|██▋       | 5000/19008 [00:00<00:00, 22123.35 examples/s]Generating train split:  79%|███████▉  | 15000/19008 [00:00<00:00, 49150.54 examples/s]Generating train split: 100%|██████████| 19008/19008 [00:00<00:00, 49858.15 examples/s]
+dagster-io/dagster train rows 151
+built 22
+== all/gen-23
+Generating train split:   0%|          | 0/19008 [00:00<?, ? examples/s]Generating train split:  26%|██▋       | 5000/19008 [00:00<00:00, 17271.91 examples/s]Generating train split:  79%|███████▉  | 15000/19008 [00:00<00:00, 40659.77 examples/s]Generating train split: 100%|██████████| 19008/19008 [00:00<00:00, 41292.16 examples/s]
+open-mmlab/mmdetection train rows 111
+built 33
+== all/gen-24
+Generating train split:   0%|          | 0/19008 [00:00<?, ? examples/s]Generating train split:  26%|██▋       | 5000/19008 [00:00<00:00, 21774.95 examples/s]Generating train split:  79%|███████▉  | 15000/19008 [00:00<00:00, 48541.39 examples/s]Generating train split: 100%|██████████| 19008/19008 [00:00<00:00, 49397.86 examples/s]
+scipy/scipy train rows 101
+built 35
+== all/gen-25
+Generating train split:   0%|          | 0/19008 [00:00<?, ? examples/s]Generating train split:  26%|██▋       | 5000/19008 [00:00<00:00, 22266.31 examples/s]Generating train split:  79%|███████▉  | 15000/19008 [00:00<00:00, 49358.60 examples/s]Generating train split: 100%|██████████| 19008/19008 [00:00<00:00, 50192.38 examples/s]
+twisted/twisted train rows 74
+built 14
+== all/gen-26
+Generating train split:   0%|          | 0/19008 [00:00<?, ? examples/s]Generating train split:  26%|██▋       | 5000/19008 [00:00<00:00, 21580.63 examples/s]Generating train split:  79%|███████▉  | 15000/19008 [00:00<00:00, 47170.37 examples/s]Generating train split: 100%|██████████| 19008/19008 [00:00<00:00, 48089.07 examples/s]
+gitpython-developers/GitPython train rows 68
+built 38
+== all/gen-27
+Generating train split:   0%|          | 0/19008 [00:00<?, ? examples/s]Generating train split:  26%|██▋       | 5000/19008 [00:00<00:00, 18175.75 examples/s]Generating train split:  84%|████████▍ | 16000/19008 [00:00<00:00, 45522.85 examples/s]Generating train split: 100%|██████████| 19008/19008 [00:00<00:00, 44427.53 examples/s]
+DataDog/integrations-core train rows 62
+built 25
+== all/gen-28
+Generating train split:   0%|          | 0/19008 [00:00<?, ? examples/s]Generating train split:  26%|██▋       | 5000/19008 [00:00<00:00, 21619.41 examples/s]Generating train split:  79%|███████▉  | 15000/19008 [00:00<00:00, 48410.16 examples/s]Generating train split: 100%|██████████| 19008/19008 [00:00<00:00, 49184.87 examples/s]
+tensorflow/models train rows 50
+built 20
+== all/gen-29
+Generating train split:   0%|          | 0/19008 [00:00<?, ? examples/s]Generating train split:  26%|██▋       | 5000/19008 [00:00<00:00, 26772.95 examples/s]Generating train split:  89%|████████▉ | 17000/19008 [00:00<00:00, 63614.79 examples/s]Generating train split: 100%|██████████| 19008/19008 [00:00<00:00, 61224.09 examples/s]
+explosion/spaCy train rows 41
+built 19
+== all/gen-3
+Generating train split:   0%|          | 0/19008 [00:00<?, ? examples/s]Generating train split:  26%|██▋       | 5000/19008 [00:00<00:00, 22201.81 examples/s]Generating train split:  79%|███████▉  | 15000/19008 [00:00<00:00, 49563.82 examples/s]Generating train split: 100%|██████████| 19008/19008 [00:00<00:00, 50231.00 examples/s]
+mesonbuild/meson train rows 954
+built 110
+== all/gen-30
+Generating train split:   0%|          | 0/19008 [00:00<?, ? examples/s]Generating train split:  26%|██▋       | 5000/19008 [00:00<00:00, 25881.15 examples/s]Generating train split:  84%|████████▍ | 16000/19008 [00:00<00:00, 60363.97 examples/s]Generating train split: 100%|██████████| 19008/19008 [00:00<00:00, 58935.22 examples/s]
+tiangolo/fastapi train rows 28
+built 11
+== all/gen-31
+Generating train split:   0%|          | 0/19008 [00:00<?, ? examples/s]Generating train split:  26%|██▋       | 5000/19008 [00:00<00:00, 21772.40 examples/s]Generating train split:  79%|███████▉  | 15000/19008 [00:00<00:00, 48021.08 examples/s]Generating train split: 100%|██████████| 19008/19008 [00:00<00:00, 48920.61 examples/s]
+kubeflow/pipelines train rows 14
+built 3
+== all/gen-32
+Generating train split:   0%|          | 0/19008 [00:00<?, ? examples/s]Generating train split:  26%|██▋       | 5000/19008 [00:00<00:00, 21650.86 examples/s]Generating train split:  79%|███████▉  | 15000/19008 [00:00<00:00, 48712.99 examples/s]Generating train split: 100%|██████████| 19008/19008 [00:00<00:00, 49413.54 examples/s]
+apache/mxnet train rows 5
+built 3
+== all/gen-33
+Generating train split:   0%|          | 0/19008 [00:00<?, ? examples/s]Generating train split:  26%|██▋       | 5000/19008 [00:00<00:00, 25872.46 examples/s]Generating train split:  84%|████████▍ | 16000/19008 [00:00<00:00, 60889.43 examples/s]Generating train split: 100%|██████████| 19008/19008 [00:00<00:00, 59260.40 examples/s]
+python/typeshed train rows 5
+built 1
+== all/gen-34
+Generating train split:   0%|          | 0/19008 [00:00<?, ? examples/s]Generating train split:  26%|██▋       | 5000/19008 [00:00<00:00, 22469.98 examples/s]Generating train split:  79%|███████▉  | 15000/19008 [00:00<00:00, 48603.31 examples/s]Generating train split: 100%|██████████| 19008/19008 [00:00<00:00, 49752.99 examples/s]
+JohnSnowLabs/spark-nlp train rows 3
+built 0
+== all/gen-4
+Generating train split:   0%|          | 0/19008 [00:00<?, ? examples/s]Generating train split:  26%|██▋       | 5000/19008 [00:00<00:00, 21937.65 examples/s]Generating train split:  79%|███████▉  | 15000/19008 [00:00<00:00, 48501.94 examples/s]Generating train split: 100%|██████████| 19008/19008 [00:00<00:00, 49482.14 examples/s]
+numpy/numpy train rows 937
+built 110
+== all/gen-5
+Generating train split:   0%|          | 0/19008 [00:00<?, ? examples/s]Generating train split:  26%|██▋       | 5000/19008 [00:00<00:00, 21244.73 examples/s]Generating train split:  79%|███████▉  | 15000/19008 [00:00<00:00, 48039.58 examples/s]Generating train split: 100%|██████████| 19008/19008 [00:00<00:00, 48616.42 examples/s]
+googleapis/google-cloud-python train rows 926
+built 110
+== all/gen-6
+Generating train split:   0%|          | 0/19008 [00:00<?, ? examples/s]Generating train split:  26%|██▋       | 5000/19008 [00:00<00:00, 21971.83 examples/s]Generating train split:  79%|███████▉  | 15000/19008 [00:00<00:00, 48559.84 examples/s]Generating train split: 100%|██████████| 19008/19008 [00:00<00:00, 49537.67 examples/s]
+pantsbuild/pants train rows 900
+built 110
+== all/gen-7
+Generating train split:   0%|          | 0/19008 [00:00<?, ? examples/s]Generating train split:  26%|██▋       | 5000/19008 [00:00<00:00, 16085.80 examples/s]Generating train split:  79%|███████▉  | 15000/19008 [00:00<00:00, 37483.30 examples/s]Generating train split: 100%|██████████| 19008/19008 [00:00<00:00, 37778.02 examples/s]
+conan-io/conan train rows 855
+built 110
+== all/gen-8
+Generating train split:   0%|          | 0/19008 [00:00<?, ? examples/s]Generating train split:  26%|██▋       | 5000/19008 [00:00<00:00, 25376.04 examples/s]Generating train split:  84%|████████▍ | 16000/19008 [00:00<00:00, 59401.63 examples/s]Generating train split: 100%|██████████| 19008/19008 [00:00<00:00, 57791.58 examples/s]
+ipython/ipython train rows 850
+built 110
+== all/gen-9
+Generating train split:   0%|          | 0/19008 [00:00<?, ? examples/s]Generating train split:  26%|██▋       | 5000/19008 [00:00<00:00, 21811.53 examples/s]Generating train split:  79%|███████▉  | 15000/19008 [00:00<00:00, 48633.22 examples/s]Generating train split: 100%|██████████| 19008/19008 [00:00<00:00, 49405.76 examples/s]
+pypa/pip train rows 686
+built 110
