@@ -1,0 +1,26 @@
+-        relative to total objects in the paginator.
+-        """
+-        # Special case, return zero if no items.
+-        if self.paginator.count == 0:
+-            return 0
+-        return (self.paginator.per_page * (self.number - 1)) + 1
+-
+-    def end_index(self):
+-        """
+-        Return the 1-based index of the last object on this page,
+-        relative to total objects found (hits).
+-        """
+-        # Special case for the last page because there can be orphans.
+-        if self.number == self.paginator.num_pages:
+-            return self.paginator.count
+-        return self.number * self.paginator.per_page
++    def __iter__(self):
++        for page_num in self.paginator.page_range:
++            yield self.paginator.page(page_num)
+\ No newline at end of file
+2026-10-16 04:35:17,452 - INFO - Grading answer for django__django-9296...
+2026-10-16 04:35:17,454 - INFO - report: {'django__django-9296': {'patch_is_None': False, 'patch_exists': True, 'patch_successfully_applied': True, 'resolved': False, 'tests_status': {'FAIL_TO_PASS': {'success': [], 'failure': ['test_paginator_iteration (pagination.tests.PaginationTests)']}, 'PASS_TO_PASS': {'success': [], 'failure': ['test_count_does_not_silence_attribute_error (pagination.tests.PaginationTests)', 'test_count_does_not_silence_type_error (pagination.tests.PaginationTests)', 'test_float_integer_page (pagination.tests.PaginationTests)', 'test_get_page (pagination.tests.PaginationTests)', 'Paginator.get_page() with an empty object_list.', 'test_get_page_empty_object_list_and_allow_empty_first_page_false (pagination.tests.PaginationTests)', 'test_get_page_hook (pagination.tests.PaginationTests)', 'test_invalid_page_number (pagination.tests.PaginationTests)', 'test_no_content_allow_empty_first_page (pagination.tests.PaginationTests)', 'test_page_indexes (pagination.tests.PaginationTests)', 'test_page_range_iterator (pagination.tests.PaginationTests)', 'test_page_sequence (pagination.tests.PaginationTests)', 'test_paginate_misc_classes (pagination.tests.PaginationTests)', 'test_paginator (pagination.tests.PaginationTests)', 'test_first_page (pagination.tests.ModelPaginationTests)', 'test_last_page (pagination.tests.ModelPaginationTests)', 'test_page_getitem (pagination.tests.ModelPaginationTests)', 'test_paginating_empty_queryset_does_not_warn (pagination.tests.ModelPaginationTests)', 'test_paginating_unordered_object_list_raises_warning (pagination.tests.ModelPaginationTests)', 'test_paginating_unordered_queryset_raises_warning (pagination.tests.ModelPaginationTests)']}, 'FAIL_TO_FAIL': {'success': [], 'failure': []}, 'PASS_TO_FAIL': {'success': [], 'failure': []}}}}
+Result for django__django-9296: resolved: False
+2026-10-16 04:35:17,454 - INFO - Attempting to stop container sweb.eval.django__django-9296.r...
+2026-10-16 04:35:32,577 - INFO - Attempting to remove container sweb.eval.django__django-9296.r...
+2026-10-16 04:35:32,614 - INFO - Container sweb.eval.django__django-9296.r removed.
