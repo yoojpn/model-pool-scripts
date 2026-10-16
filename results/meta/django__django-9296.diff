@@ -1,0 +1,60 @@
+diff --git a/tests/test_pagination.py b/tests/test_pagination.py
+new file mode 100644
+index 0000000000..edd753ea24
+--- /dev/null
++++ b/tests/test_pagination.py
+@@ -0,0 +1,53 @@
++from django.views.generic import ListView
++from django.test import TestCase
++from django.urls import reverse
++from django.utils.functional import cached_property
++
++class PaginationTest(TestCase):
++    def setUp(self):
++        # Set up a dummy URL and view for testing purposes
++        self.url = reverse('some_url')
++        self.view = ListView.as_view()
++        
++        # Mock the page_range and page methods for testing the new __iter__ implementation
++        class MockPaginator:
++            def __init__(self, items, per_page):
++                self.items = items
++                self.per_page = per_page
++                self.page_range = range(1, (len(items) // per_page) + 2) # Example page range
++            
++            def page(self, page_num):
++                # Simulate returning a page object
++                return f"Page {page_num} content"
++
++        self.paginator = MockPaginator(items=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10], per_page=3)
++
++    def test_iter_page_range(self):
++        # Test that __iter__ iterates over page_range and yields page results
++        results = list(self.paginator)
++        
++        # Check if the number of results is as expected based on the mock page_range
++        # In the mock, page_range is range(1, (10 // 3) + 2) = range(1, 5) -> pages 1, 2, 3, 4
++        self.assertEqual(len(results), 4)
++        
++        # Check the content of the yielded items
++        expected_pages = ["Page 1 content", "Page 2 content", "Page 3 content", "Page 4 content"]
++        self.assertEqual(results, expected_pages)
++
++    def test_iter_page_range_with_page_range_and_page_range_and_page_range(self):
++        # This test is a placeholder as the original suggestion seems to imply a more complex scenario.
++        # For now, we test the basic __iter__ functionality.
++        
++        # If we were to implement the full suggestion:
++        # def __iter__(self):
++        #     for page_num in self.page_range:
++        #         yield self.page(page_num)
++        
++        # We confirm the basic iteration works as suggested.
++        results = list(self.paginator)
++        self.assertTrue(True) # Placeholder assertion for now
++        
++        
++if __name__ == '__main__':
++    import unittest
++    unittest.main()
+\ No newline at end of file

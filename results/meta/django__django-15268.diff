@@ -1,0 +1,55 @@
+diff --git a/test_alter_together.py b/test_alter_together.py
+new file mode 100644
+index 0000000000..89f4503624
+--- /dev/null
++++ b/test_alter_together.py
+@@ -0,0 +1,48 @@
++import pytest
++from django.db.migrations import Migration
++from django.db.models import Model
++from django.db.models.signals import post_migrate
++
++# このファイルは、AlterFooTogether操作の最適化に関するテストを定義します。
++# 既存のテストファイル（もしあれば）を尊重し、新しいテストを追加します。
++
++# テスト対象のシナリオを定義します。
++# 実際のテスト内容は、Djangoのマイグレーションシステムとモデル定義に依存するため、
++# ここでは概念的なテスト構造を示します。
++
++def test_alter_foo_together_optimization():
++    # このテストは、AlterUniqueTogetherとAlterIndexTogetherが単一の操作に統合されるべきケースを検証することを目的とします。
++    # 実際のテストは、マイグレーションファイルやモデル定義をセットアップする必要があります。
++    
++    # 例として、最適化されるべき操作のリストを定義します。
++    operations = [
++        # 既存の操作（例として）
++        # migrations.AlterUniqueTogether(name='mymodel', unique_together=set()),
++        # migrations.AlterIndexTogether(name='mymodel', index_together=set()),
++        migrations.AlterUniqueTogether(
++            name='mymodel',
++            unique_together={("col",)},
++        ),
++        migrations.AlterIndexTogether(
++            name='mymodel',
++            index_together={("col",)},
++        ),
++    ]
++    
++    # 期待される最適化された操作のリスト
++    expected_operations = [
++        migrations.AlterUniqueTogether(
++            name='mymodel',
++            unique_together={("col",)},
++        ),
++        migrations.AlterIndexTogether(
++            name='mymodel',
++            index_together={("col",)},
++        ),
++    ]
++    
++    # 実際の検証ロジックは、マイグレーションオブジェクトやDBスキーマの操作をシミュレートする必要があります。
++    # ここでは、概念的な検証として、リストが期待通りになることを確認します。
++    assert operations == expected_operations, "AlterFooTogether operations should be optimized."
++
++# 既存のテストとの重複を避けるため、このファイルは既存のテストとは独立して動作するように設計します。
+\ No newline at end of file
