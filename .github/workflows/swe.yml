@@ -45,7 +45,9 @@ jobs:
       - uses: actions/download-artifact@v4
         with: { name: tasks, path: run }
       - run: pip install swebench
+      - run: runner/mark.sh '${{ matrix.iid }}' 'job started'
       - name: start container
+        timeout-minutes: 15
         run: |
           set -x
           IMG="swebench/sweb.eval.x86_64.$(echo '${{ matrix.iid }}' | sed 's/__/_1776_/'):latest"
@@ -55,7 +57,9 @@ jobs:
           # scrub future history: keep only commits reachable from base_commit state
           docker exec ctr bash -c "cd /testbed && git status --short | head -3; git tag | xargs -r git tag -d >/dev/null; for b in \$(git branch --format='%(refname:short)'); do git branch -D \$b >/dev/null 2>&1; done; git remote | xargs -r -n1 git remote remove; git reflog expire --expire=now --all; git gc --prune=now -q; git log --oneline | head -2"
           docker exec ctr bash -c "ls /opt/miniconda3/bin/python3 >/dev/null && echo conda-ok"
+      - run: runner/mark.sh '${{ matrix.iid }}' 'container ready'
       - name: solve
+        timeout-minutes: 25
         run: |
           cd runner && (test -d node_modules || true)
           cd ..
@@ -72,13 +76,18 @@ jobs:
           d=open('out/model.diff').read()
           json.dump([{"instance_id":"${{ matrix.iid }}","model_name_or_path":"gemma4-e2b-agent","model_patch":d}], open('out/preds.json','w'))
           PY
+      - run: runner/mark.sh '${{ matrix.iid }}' 'solve done'
+        if: always()
       - name: official evaluation
+        timeout-minutes: 25
         run: |
           mkdir -p out/eval
           python -m swebench.harness.run_evaluation --dataset_name princeton-nlp/SWE-bench_Verified --predictions_path out/preds.json --max_workers 1 --run_id r --instance_ids '${{ matrix.iid }}' --namespace swebench --cache_level instance > out/eval.log 2>&1; tail -30 out/eval.log
           cat gemma4-e2b-agent.r.json 2>/dev/null || true
           cp gemma4-e2b-agent.r.json out/report.json 2>/dev/null || true
           find logs/run_evaluation -name run_instance.log -exec cp {} out/run_instance.log \; || true
+      - run: runner/mark.sh '${{ matrix.iid }}' 'eval done'
+        if: always()
       - uses: actions/upload-artifact@v4
         if: always()
         with: { name: 'res-${{ matrix.iid }}', path: out }
