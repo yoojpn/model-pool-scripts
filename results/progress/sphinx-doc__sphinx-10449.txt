@@ -1,1 +1,2 @@
 04:47:52 job started
+04:48:32 container ready
