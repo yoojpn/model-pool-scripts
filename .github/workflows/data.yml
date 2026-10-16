@@ -1,0 +1,13 @@
+  mbpp:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip install datasets
+      - run: |
+          mkdir -p data2
+          python train/gen_mbpp.py data2/mbpp.jsonl 2>&1 | tail -5
+          gzip -f data2/mbpp.jsonl
+          git config user.name swe-runner; git config user.email swe@example.invalid
+          git add data2; git commit -qm "mbpp trajectories" || true
+          for i in 1 2 3; do git pull -q --rebase origin ${{ github.ref_name }} && git push -q origin HEAD:${{ github.ref_name }} && break; sleep 5; done
