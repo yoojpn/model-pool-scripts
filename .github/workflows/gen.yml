@@ -6,13 +6,30 @@ on:
 permissions:
   contents: write
 jobs:
+  sel:
+    runs-on: ubuntu-latest
+    outputs:
+      repos: ${{ steps.s.outputs.repos }}
+    steps:
+      - run: pip install datasets
+      - id: s
+        run: |
+          python - <<'PY' | tee -a $GITHUB_OUTPUT
+          import json, collections
+          from datasets import load_dataset
+          ds = load_dataset('princeton-nlp/SWE-bench', split='train')
+          c = collections.Counter(ds['repo'])
+          print(c.most_common(40), file=__import__('sys').stderr)
+          print('repos=' + json.dumps([r for r, _ in c.most_common(14)]))
+          PY
   gen:
+    needs: sel
     runs-on: ubuntu-latest
     timeout-minutes: 90
     strategy:
       fail-fast: false
       matrix:
-        repo: [django/django, sympy/sympy, scikit-learn/scikit-learn, matplotlib/matplotlib, sphinx-doc/sphinx, pytest-dev/pytest, astropy/astropy, pydata/xarray, pylint-dev/pylint, psf/requests, mwaskom/seaborn, pallets/flask]
+        repo: ${{ fromJson(needs.sel.outputs.repos) }}
     steps:
       - uses: actions/checkout@v4
       - run: pip install datasets unidiff
