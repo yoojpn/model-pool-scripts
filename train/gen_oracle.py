@@ -27,7 +27,9 @@ SAY_READ = ['Reading `{p}` around the match.', 'Let me look at the relevant part
 SAY_EDIT = ['This is the cause; I will make a minimal edit.', 'I will change this part of the code.', 'Applying the fix to this spot.']
 
 def hunks_of(patch):
-    ps = PatchSet(patch); res = []
+    try: ps = PatchSet(patch)
+    except Exception: return None
+    res = []
     for pf in ps:
         if pf.is_added_file or pf.is_removed_file or pf.is_rename: return None
         if re.search(r'(^|/)(tests?|testing)(/|_)|test_|conftest|docs?/', pf.path): return None
@@ -55,10 +57,10 @@ def build(r):
                 if not ('_' in w or re.search(r'[a-z][A-Z]', w) or w[0].isupper()): continue
                 if w in src0: cands.append(w)
         msgs = []; cid = [0]
-        def call(name, args, say=''):
+        def call(name, args, say='', bad=False):
             cid[0] += 1; i = f'call_{cid[0]}'
             res = tool(ws, name, args)
-            msgs.append({'role': 'assistant', 'content': say, 'tool_calls': [{'id': i, 'type': 'function', 'function': {'name': name, 'arguments': J(args)}}]})
+            msgs.append({'bad': bad, 'role': 'assistant', 'content': say, 'tool_calls': [{'id': i, 'type': 'function', 'function': {'name': name, 'arguments': J(args)}}]})
             msgs.append({'role': 'tool', 'tool_call_id': i, 'name': name, 'content': J(res)})
             return res
         rng = random.Random(r['instance_id'])
@@ -74,7 +76,7 @@ def build(r):
         if not done: return None
         h0 = hs[0][1][0]
         call('read_file', {'path': path0, 'offset': max(1, h0.source_start - 20), 'limit': min(120, h0.source_length + 45)}, rng.choice(SAY_READ).format(p=path0))
-        names = []
+        names = []; recovered = False
         for path, hh in hs:
             if path != path0 and True:
                 call('read_file', {'path': path, 'offset': max(1, hh[0].source_start - 20), 'limit': min(120, hh[0].source_length + 45)}, rng.choice(SAY_READ).format(p=path))
@@ -89,6 +91,15 @@ def build(r):
                     old = '\n'.join(v for k, v in seg if k != '+'); new = '\n'.join(v for k, v in seg if k != '-')
                     if old and text.count(old) == 1: ok = True; break
                 if not ok or old == new: return None
+                if rng.random() < 0.3 and '\n' in old and not recovered:
+                    ol = old.split('\n'); k = next((j for j, l in enumerate(ol) if l.startswith('    ')), None)
+                    if k is not None:
+                        ol[k] = ol[k].lstrip(); badold = '\n'.join(ol)
+                        if text.count(badold) == 0:
+                            r1 = call('edit_file', {'path': path, 'old': badold, 'new': new}, rng.choice(SAY_EDIT), bad=True)
+                            if not r1.get('ok'):
+                                recovered = True
+                                call('read_file', {'path': path, 'offset': max(1, h.source_start - 5), 'limit': h.source_length + 15}, 'The edit did not match exactly (whitespace). Let me re-read the exact text.')
                 res = call('edit_file', {'path': path, 'old': old, 'new': new}, rng.choice(SAY_EDIT))
                 if not res.get('ok'): return None
                 text = open(os.path.join(ws, path), encoding='utf-8').read()
