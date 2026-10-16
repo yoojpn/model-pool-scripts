@@ -1,0 +1,9 @@
+stats {'seen': 6000, 'resolved': 2903}
+tools {'think': 7494, 'str_replace_editor': 69871, 'execute_bash': 87916, 'finish': 2813, 'task_tracker': 2089}
+turns median 56 p25 47 chars median 234256 short(<=30 turns,<60k chars): 0 of 2903
+repos []
+'[Errno 9] Bad file descriptor' thrown while requesting GET https://huggingface.co/datasets/nebius/SWE-rebench-openhands-trajectories/resolve/35455389ab51bf5e2306bfd436ef72d0f98bf882/trajectories.parquet
+Retrying in 1s [Retry 1/5].
+Fatal Python error: PyGILState_Release: auto-releasing thread-state, but no thread-state for this thread
+Python runtime state: finalizing (tstate=0x0000000000ba6748)
+
