@@ -1,12 +1,5 @@
 [
  {
-  "id": "scikit-learn__scikit-learn-13124",
-  "resolved": false,
-  "report": "[Errno 2] No such file or directory: 'all/res-scikit-learn__scikit-learn-13124/report.json'",
-  "meta": "[Errno 2] No such file or directory: 'all/res-scikit-learn__scikit-learn-13124/meta.json'",
-  "patch_bytes": 1078
- },
- {
   "id": "sphinx-doc__sphinx-8548",
   "resolved": false,
   "report": "[Errno 2] No such file or directory: 'all/res-sphinx-doc__sphinx-8548/report.json'",
