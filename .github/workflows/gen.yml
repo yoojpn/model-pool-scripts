@@ -1,0 +1,43 @@
+name: gen
+on:
+  push:
+    branches: ['gen/**']
+    paths: ['gen/go']
+permissions:
+  contents: write
+jobs:
+  gen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        repo: [django/django, sympy/sympy, scikit-learn/scikit-learn, matplotlib/matplotlib, sphinx-doc/sphinx, pytest-dev/pytest, astropy/astropy, pydata/xarray, pylint-dev/pylint, psf/requests, mwaskom/seaborn, pallets/flask]
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip install datasets unidiff
+      - name: build
+        run: |
+          read CAP SEED < gen/go
+          mkdir -p gen/out
+          python train/gen_oracle.py '${{ matrix.repo }}' $CAP $SEED gen/out/$(echo '${{ matrix.repo }}' | tr / _).jsonl 2>&1 | tail -60 | tee gen/out/log.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: 'gen-${{ strategy.job-index }}', path: gen/out }
+  collect:
+    needs: gen
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with: { pattern: 'gen-*', path: all }
+      - run: |
+          mkdir -p data; cat all/*/*.jsonl > data/oracle.jsonl || true
+          wc -l data/oracle.jsonl | tee data/count.txt
+          for d in all/gen-*; do echo "== $d"; tail -3 $d/log.txt; done > data/logs.txt || true
+          gzip -f data/oracle.jsonl
+          git config user.name swe-runner; git config user.email swe@example.invalid
+          git add data; git commit -qm "oracle data" || true
+          git pull -q --rebase origin ${{ github.ref_name }} || true
+          git push -q origin HEAD:${{ github.ref_name }}
