@@ -1,7 +1,16 @@
-usage: run_evaluation.py [-h] [-d DATASET_NAME] [-s SPLIT]
-                         [-i INSTANCE_IDS [INSTANCE_IDS ...]] -p
-                         PREDICTIONS_PATH [--max_workers MAX_WORKERS]
-                         [--open_file_limit OPEN_FILE_LIMIT] [-t TIMEOUT] -id
-                         RUN_ID [--rewrite_reports REWRITE_REPORTS]
-                         [--modal MODAL]
-run_evaluation.py: error: unrecognized arguments: --namespace swebench --cache_level instance
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Generating test split:   0%|          | 0/500 [00:00<?, ? examples/s]Generating test split: 100%|██████████| 500/500 [00:00<00:00, 46514.48 examples/s]
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/runner/.local/lib/python3.12/site-packages/swebench/harness/run_evaluation.py", line 863, in <module>
+    main(**vars(args))
+  File "/home/runner/.local/lib/python3.12/site-packages/swebench/harness/run_evaluation.py", line 783, in main
+    run_instances(
+  File "/home/runner/.local/lib/python3.12/site-packages/swebench/harness/run_evaluation.py", line 455, in run_instances
+    test_specs = [make_test_spec(instance) for instance in instances]
+                  ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/swebench/harness/utils.py", line 262, in make_test_spec
+    image=instance["image"],
+          ~~~~~~~~^^^^^^^^^
+KeyError: 'image'
