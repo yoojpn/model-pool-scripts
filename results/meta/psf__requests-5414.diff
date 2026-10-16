@@ -1,0 +1,13 @@
+diff --git a/requests/models.py b/requests/models.py
+index e7d292d5..15a2bd5a 100644
+--- a/requests/models.py
++++ b/requests/models.py
+@@ -162,7 +162,7 @@ class RequestEncodingMixin(object):
+             elif fp is None:
+                 continue
+             else:
+-                fdata = fp
++                fdata = fp.read()
+ 
+             rf = RequestField(name=k, data=fdata, filename=fn, headers=fh)
+             rf.make_multipart(content_type=ft)

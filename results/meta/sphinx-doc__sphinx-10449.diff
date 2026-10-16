@@ -1,0 +1,14 @@
+diff --git a/sphinx/ext/autodoc/__init__.py b/sphinx/ext/autodoc/__init__.py
+index e16ab8ce5..8198049d7 100644
+--- a/sphinx/ext/autodoc/__init__.py
++++ b/sphinx/ext/autodoc/__init__.py
+@@ -1541,6 +1541,9 @@ class ClassDocumenter(DocstringSignatureMixin, ModuleLevelDocumenter):  # type:
+         if self.config.autodoc_typehints_format == "short":
+             kwargs.setdefault('unqualified_typehints', True)
+ 
++        if self.config.autodoc_typehints_format == "short":
++            kwargs.setdefault('include_return_annotation', True)
++
+         try:
+             self._signature_class, self._signature_method_name, sig = self._get_signature()
+         except TypeError as exc:

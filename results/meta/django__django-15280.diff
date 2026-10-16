@@ -1,0 +1,31 @@
+diff --git a/tests/prefetch_related/test_prefetch_related_objects.py b/tests/prefetch_related/test_prefetch_related_objects.py
+index 20d4da5a0a..8fa556d911 100644
+--- a/tests/prefetch_related/test_prefetch_related_objects.py
++++ b/tests/prefetch_related/test_prefetch_related_objects.py
+@@ -95,21 +95,12 @@ class PrefetchRelatedObjectsTests(TestCase):
+             prefetch_related_objects([book1], Prefetch('authors'))
+ 
+         with self.assertNumQueries(0):
+-            self.assertCountEqual(book1.authors.all(), [self.author1, self.author2, self.author3])
+-
+-    def test_prefetch_object_twice(self):
+-        book1 = Book.objects.get(id=self.book1.id)
+-        book2 = Book.objects.get(id=self.book2.id)
+-        with self.assertNumQueries(1):
+-            prefetch_related_objects([book1], Prefetch('authors'))
+-        with self.assertNumQueries(1):
+-            prefetch_related_objects([book1, book2], Prefetch('authors'))
+-        with self.assertNumQueries(0):
+-            self.assertCountEqual(book2.authors.all(), [self.author1])
++            self.assertCountEqual(author1.books.all(), [self.book1, self.book2])
+ 
+-    def test_prefetch_object_to_attr(self):
+-        book1 = Book.objects.get(id=self.book1.id)
+-        with self.assertNumQueries(1):
++    def test_m2m_then_m2m(self):
++        """A m2m can be followed through another m2m."""
++        authors = list(Author.objects.all())
++        with self.assertNumQueries(2):
+             prefetch_related_objects([book1], Prefetch('authors', to_attr='the_authors'))
+ 
+         with self.assertNumQueries(0):

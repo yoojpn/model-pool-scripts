@@ -1,0 +1,30 @@
+diff --git a/django/template/loader_tags.py b/django/template/loader_tags.py
+index b96214cad1..33d780c126 100644
+--- a/django/template/loader_tags.py
++++ b/django/template/loader_tags.py
+@@ -7,8 +7,8 @@ from .base import (
+     Node, Template, TemplateSyntaxError, TextNode, Variable, token_kwargs,
+ )
+ from .library import Library
+-
+-register = Library()
++import io
++import re
+ 
+ BLOCK_CONTEXT_KEY = 'block_context'
+ 
+@@ -24,8 +24,12 @@ class BlockContext:
+ 
+     def pop(self, name):
+         try:
+-            return self.blocks[name].pop()
+-        except IndexError:
++            block = self.blocks[name].pop()
++            if block is not None:
++                return block
++            else:
++                return None
++        except KeyError:
+             return None
+ 
+     def push(self, name, block):
