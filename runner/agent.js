@@ -72,6 +72,7 @@ export function parsePlan(text) {
   return out;
 }
 
+export const CODEBASE_PLAN = ['Search the codebase with grep for the identifiers or error messages named in the issue, to find the relevant source file.', 'Read that source file around the match and work out the cause.', 'Edit the existing source file (not the tests) with a minimal, exact change.', 'Check the edited file (syntax check, or the tests if they can run) and report honestly what was and was not verified.'];
 const PLAN_INSTRUCTION = `あなたはコーディングエージェントの計画担当です。依頼を、実行可能で具体的な4〜7個の手順に分解し、JSONだけを出力してください。各手順には、扱うファイル名、実行するコマンド、確認方法を入れ、一般論は書かないこと。
 形式: {"subtasks":["...","..."]}
 
@@ -189,8 +190,10 @@ export class Agent {
   stop() { this.abort?.abort(); }
 
   async plan(text) {
-    let ws = '';
-    try { const t = await this.api.tool('list_dir', { path: '.', depth: 2 }); if (t?.ok) ws = t.entries.filter((x) => !x.dir).slice(0, 40).map((x) => x.path).join('\n'); } catch {}
+    let ws = '', nfiles = 0, known = new Set();
+    try { const t = await this.api.tool('list_dir', { path: '.', depth: 2 }); if (t?.ok) { const fl = t.entries.filter((x) => !x.dir); nfiles = fl.length; ws = fl.slice(0, 40).map((x) => x.path).join('\n'); for (const x of t.entries) known.add(normPath(x.path)); } } catch {}
+    // Existing codebase (many files already there): a free-form plan from a small model tends to name files that do not exist, so use the fixed locate -> read -> edit -> check procedure.
+    if (nfiles >= 25 && !this.s.freePlan) return CODEBASE_PLAN.slice();
     const prompt = `<start_of_turn>user\n${PLAN_INSTRUCTION}\n\n現在の作業ディレクトリ:\n${ws || '(空)'}\n\n依頼: ${text}\n出力:<end_of_turn>\n<start_of_turn>model\n`;
     const r = await this.engine.complete({ prompt, stop: ['<end_of_turn>'], max_tokens: 300, temperature: 0, lora: ROLE_LORA.plan_verify, signal: this.abort.signal, onDelta: (d) => this.h.onRate?.(d.rate, 'planner') });
     return dedupePlan(parsePlan(r.text));

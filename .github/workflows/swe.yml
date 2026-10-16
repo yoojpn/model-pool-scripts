@@ -26,7 +26,8 @@ jobs:
       - id: s
         run: |
           N=$(cat run/go | tr -d '[:space:]'); N=${N:-20}
-          IDS=$(python runner/select.py 20261016 $N)
+          SEED=$(cat run/seed 2>/dev/null | tr -d '[:space:]'); SEED=${SEED:-20261016}
+          IDS=$(python runner/select.py $SEED $N)
           echo "ids=$IDS" >> $GITHUB_OUTPUT
           echo "$IDS"
       - uses: actions/upload-artifact@v4
@@ -67,7 +68,7 @@ jobs:
           if [ -f run/gold ]; then
             python -c "import json;print(next(t for t in json.load(open('run/tasks.json')) if t['instance_id']=='${{ matrix.iid }}')['patch'],end='')" > out/model.diff
           else
-            CTR_PY=/opt/miniconda3/bin/python3 node runner/run_task.mjs '${{ matrix.iid }}' ctr
+            FREE_PLAN=$(cat run/free_plan 2>/dev/null | tr -d "[:space:]") CODER_LORA=$(cat run/coder_lora 2>/dev/null | tr -d '[:space:]') N_LORA=4 CTR_PY=/opt/miniconda3/bin/python3 node runner/run_task.mjs '${{ matrix.iid }}' ctr
             docker exec ctr bash -c "cd /testbed && git add -A -N . 2>/dev/null; git diff" > out/model.diff || true
           fi
           wc -c out/model.diff
