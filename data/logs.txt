@@ -1,0 +1,48 @@
+== all/gen-0
+Generating train split:   0%|          | 0/19008 [00:00<?, ? examples/s]Generating train split:  26%|██▋       | 5000/19008 [00:00<00:00, 25867.23 examples/s]Generating train split:  84%|████████▍ | 16000/19008 [00:00<00:00, 60098.99 examples/s]Generating train split: 100%|██████████| 19008/19008 [00:00<00:00, 58609.24 examples/s]
+django/django train rows 0
+built 0
+== all/gen-1
+Generating train split:   0%|          | 0/19008 [00:00<?, ? examples/s]Generating train split:  26%|██▋       | 5000/19008 [00:00<00:00, 20700.53 examples/s]Generating train split:  79%|███████▉  | 15000/19008 [00:00<00:00, 46885.82 examples/s]Generating train split: 100%|██████████| 19008/19008 [00:00<00:00, 47357.74 examples/s]
+sympy/sympy train rows 0
+built 0
+== all/gen-10
+Generating train split:   0%|          | 0/19008 [00:00<?, ? examples/s]Generating train split:  26%|██▋       | 5000/19008 [00:00<00:00, 22600.23 examples/s]Generating train split:  79%|███████▉  | 15000/19008 [00:00<00:00, 49330.40 examples/s]Generating train split: 100%|██████████| 19008/19008 [00:00<00:00, 50358.00 examples/s]
+mwaskom/seaborn train rows 0
+built 0
+== all/gen-11
+Generating train split:   0%|          | 0/19008 [00:00<?, ? examples/s]Generating train split:  26%|██▋       | 5000/19008 [00:00<00:00, 22683.88 examples/s]Generating train split:  79%|███████▉  | 15000/19008 [00:00<00:00, 49395.14 examples/s]Generating train split: 100%|██████████| 19008/19008 [00:00<00:00, 50504.24 examples/s]
+pallets/flask train rows 0
+built 0
+== all/gen-2
+Generating train split:   0%|          | 0/19008 [00:00<?, ? examples/s]Generating train split:  26%|██▋       | 5000/19008 [00:00<00:00, 21426.75 examples/s]Generating train split:  79%|███████▉  | 15000/19008 [00:00<00:00, 47480.03 examples/s]Generating train split: 100%|██████████| 19008/19008 [00:00<00:00, 48271.46 examples/s]
+scikit-learn/scikit-learn train rows 0
+built 0
+== all/gen-3
+Generating train split:   0%|          | 0/19008 [00:00<?, ? examples/s]Generating train split:  26%|██▋       | 5000/19008 [00:00<00:00, 30493.12 examples/s]Generating train split:  95%|█████████▍| 18000/19008 [00:00<00:00, 75653.41 examples/s]Generating train split: 100%|██████████| 19008/19008 [00:00<00:00, 70280.60 examples/s]
+matplotlib/matplotlib train rows 0
+built 0
+== all/gen-4
+error: failed to encode 'tests/roots/test-root/wrongenc.inc' from UTF-8 to iso-8859
+error: failed to encode 'tests/roots/test-warnings/wrongenc.inc' from UTF-8 to iso-8859
+built 0
+== all/gen-5
+Generating train split:   0%|          | 0/19008 [00:00<?, ? examples/s]Generating train split:  26%|██▋       | 5000/19008 [00:00<00:00, 26310.40 examples/s]Generating train split:  89%|████████▉ | 17000/19008 [00:00<00:00, 62467.37 examples/s]Generating train split: 100%|██████████| 19008/19008 [00:00<00:00, 60321.94 examples/s]
+pytest-dev/pytest train rows 0
+built 0
+== all/gen-6
+Generating train split:   0%|          | 0/19008 [00:00<?, ? examples/s]Generating train split:  26%|██▋       | 5000/19008 [00:00<00:00, 28942.48 examples/s]Generating train split:  95%|█████████▍| 18000/19008 [00:00<00:00, 72351.19 examples/s]Generating train split: 100%|██████████| 19008/19008 [00:00<00:00, 67084.58 examples/s]
+astropy/astropy train rows 0
+built 0
+== all/gen-7
+Generating train split:   0%|          | 0/19008 [00:00<?, ? examples/s]Generating train split:  26%|██▋       | 5000/19008 [00:00<00:00, 21783.82 examples/s]Generating train split:  79%|███████▉  | 15000/19008 [00:00<00:00, 48372.10 examples/s]Generating train split: 100%|██████████| 19008/19008 [00:00<00:00, 49221.77 examples/s]
+pydata/xarray train rows 0
+built 0
+== all/gen-8
+Generating train split:   0%|          | 0/19008 [00:00<?, ? examples/s]Generating train split:  26%|██▋       | 5000/19008 [00:00<00:00, 22102.76 examples/s]Generating train split:  79%|███████▉  | 15000/19008 [00:00<00:00, 48862.59 examples/s]Generating train split: 100%|██████████| 19008/19008 [00:00<00:00, 49684.28 examples/s]
+pylint-dev/pylint train rows 0
+built 0
+== all/gen-9
+Generating train split:   0%|          | 0/19008 [00:00<?, ? examples/s]Generating train split:  26%|██▋       | 5000/19008 [00:00<00:00, 22258.22 examples/s]Generating train split:  79%|███████▉  | 15000/19008 [00:00<00:00, 49089.39 examples/s]Generating train split: 100%|██████████| 19008/19008 [00:00<00:00, 50074.95 examples/s]
+psf/requests train rows 0
+built 0
