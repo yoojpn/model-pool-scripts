@@ -1,0 +1,7 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Generating train split:   0%|          | 0/374 [00:00<?, ? examples/s]Generating train split: 100%|██████████| 374/374 [00:00<00:00, 125313.12 examples/s]
+Generating test split:   0%|          | 0/500 [00:00<?, ? examples/s]Generating test split: 100%|██████████| 500/500 [00:00<00:00, 284166.94 examples/s]
+Generating validation split:   0%|          | 0/90 [00:00<?, ? examples/s]Generating validation split: 100%|██████████| 90/90 [00:00<00:00, 81495.54 examples/s]
+Generating prompt split:   0%|          | 0/10 [00:00<?, ? examples/s]Generating prompt split: 100%|██████████| 10/10 [00:00<00:00, 10017.44 examples/s]
+skip 48 TimeoutExpired Command 'python3 test_solution.py' timed out after 20 second
+built 80
