@@ -3,5 +3,5 @@ usage: run_evaluation.py [-h] [-d DATASET_NAME] [-s SPLIT]
                          PREDICTIONS_PATH [--max_workers MAX_WORKERS]
                          [--open_file_limit OPEN_FILE_LIMIT] [-t TIMEOUT] -id
                          RUN_ID [--rewrite_reports REWRITE_REPORTS]
-                         [--report_dir REPORT_DIR] [--modal MODAL]
+                         [--modal MODAL]
 run_evaluation.py: error: unrecognized arguments: --namespace swebench --cache_level instance
