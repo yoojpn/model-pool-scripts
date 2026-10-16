@@ -1,0 +1,14 @@
+diff --git a/test_symbols.py b/test_symbols.py
+new file mode 100644
+index 0000000000..f82d86c3aa
+--- /dev/null
++++ b/test_symbols.py
+@@ -0,0 +1,7 @@
++import sympy as smp
++
++try:
++    q, u = smp.symbols(('q:2', 'u:2'), cls=smp.Function)
++    print(type(q[0]))
++except Exception as e:
++    print(f"An error occurred: {e}")
+\ No newline at end of file

@@ -1,0 +1,13 @@
+diff --git a/sympy/sympy.py b/sympy/sympy.py
+new file mode 100644
+index 000000000..653bc0eac
+--- /dev/null
++++ b/sympy/sympy.py
+@@ -0,0 +1,6 @@
++    def complement(self, other):
++        if isinstance(self, FiniteSet) and isinstance(other, Interval):
++            # Handle the case: {x, y} \ [-10, 10]
++            # The issue suggests that for FiniteSet and Interval, the result should be the set itself.
++            return self
++        return super().complement(other)
+\ No newline at end of file

@@ -1,0 +1,28 @@
+diff --git a/django/contrib/contenttypes/management/__init__.py b/django/contrib/contenttypes/management/__init__.py
+index 2b5f688136..743d71a6ea 100644
+--- a/django/contrib/contenttypes/management/__init__.py
++++ b/django/contrib/contenttypes/management/__init__.py
+@@ -24,14 +24,14 @@ class RenameContentType(migrations.RunPython):
+             content_type.model = new_model
+             try:
+                 with transaction.atomic(using=db):
+-                    content_type.save(update_fields={'model'})
++                    content_type.save(using=db, update_fields={'model'})
+             except IntegrityError:
+                 # Gracefully fallback if a stale content type causes a
+                 # conflict as remove_stale_contenttypes will take care of
+                 # asking the user what should be done next.
+                 content_type.model = old_model
+             else:
+-                # Clear the cache as the `get_by_natual_key()` call will cache
++                # Clear the cache as the `get_by_natural_key()` call will cache
+                 # the renamed ContentType instance by its old model name.
+                 ContentType.objects.clear_cache()
+ 
+@@ -131,4 +131,4 @@ def create_contenttypes(app_config, verbosity=2, interactive=True, using=DEFAULT
+     ContentType.objects.using(using).bulk_create(cts)
+     if verbosity >= 2:
+         for ct in cts:
+-            print("Adding content type '%s | %s'" % (ct.app_label, ct.model))
++            print("Adding content type '%s | %s'" % (ct.app_label, ct.model))
+\ No newline at end of file

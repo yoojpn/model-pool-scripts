@@ -1,0 +1,52 @@
+diff --git a/tests/test_query_set_pickling.py b/tests/test_query_set_pickling.py
+new file mode 100644
+index 0000000000..32b455c3ae
+--- /dev/null
++++ b/tests/test_query_set_pickling.py
+@@ -0,0 +1,45 @@
++import pickle
++import os
++from django.test import TestCase
++from django.db.models import Sum
++from django_error2.models import Toy
++
++class QuerySetPicklingTest(TestCase):
++    def setUp(self):
++        # テスト用のデータをセットアップ
++        self.toy1 = Toy.objects.create(name='foo', price=10, material='wood')
++        self.toy2 = Toy.objects.create(name='bar', price=20, material='plastic')
++        self.toy3 = Toy.objects.create(name='baz', price=100, material='wood')
++
++    def test_values_and_annotate_pickling(self):
++        # values()とannotate()の結果をpickleで保存し、ロードして比較する
++        prices = Toy.objects.values('material').annotate(total_price=Sum('price'))
++        
++        # pickleで保存
++        pickled_prices = pickle.dumps(prices.query)
++        
++        # ロードして再構築
++        restored_query = pickle.loads(pickled_prices)
++        
++        # 結果の検証
++        self.assertIsInstance(restored_query, Toy.objects.QuerySet)
++        
++        # 実際のクエリを実行して比較
++        actual_prices = Toy.objects.values('material').annotate(total_price=Sum('price'))
++        
++        # 念のため、データの内容が同じことを確認
++        self.assertEqual(len(actual_prices), len(restored_query))
++
++    def test_all_pickling(self):
++        # QuerySet全体をpickleで保存し、ロードする
++        prices2 = Toy.objects.all()
++        
++        # pickleで保存
++        pickled_prices2 = pickle.dumps(prices2.query)
++        
++        # ロードして再構築
++        restored_prices2 = pickle.loads(pickled_prices2)
++        
++        # 結果の検証
++        self.assertIsInstance(restored_prices2, Toy.objects.QuerySet)
++        self.assertEqual(len(restored_prices2), len(prices2))
+\ No newline at end of file

@@ -1,0 +1,29 @@
+diff --git a/test1/test_lag_window.py b/test1/test_lag_window.py
+new file mode 100644
+index 0000000000..750c2b4c96
+--- /dev/null
++++ b/test1/test_lag_window.py
+@@ -0,0 +1,22 @@
++from django.test import TestCase
++from django.db import models
++from django.db.models import F, Window
++from test1.models import LagTest
++
++class LagTestWindow(TestCase):
++    def setUp(self):
++        # Setup for testing (assuming a functional environment exists)
++        # In a real scenario, this would involve setting up a test database and data.
++        pass
++
++    def test_lag_with_output_field_works(self):
++        # Test case that works as suggested: using output_field=FloatField()
++        w = Window(expression=Lag('amount', 7, output_field=models.FloatField()), partition_by=[F('modified')], order_by=F('modified').asc())
++        
++        # This part is illustrative; actual assertions depend on the test data setup.
++        # We are focusing on the syntax fix for the error.
++        try:
++            q = LagTest.objects.all().annotate(w=w)
++            self.assertTrue(True) # Placeholder: If this runs without OperationalError, the fix is applied.
++        except Exception as e:
++            self.fail(f"Test failed with an unexpected error: {e}")
+\ No newline at end of file

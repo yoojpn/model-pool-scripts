@@ -1,38 +1,41 @@
 <frozen runpy>:128: RuntimeWarning: 'swebench.harness.run_evaluation' found in sys.modules after import of package 'swebench.harness', but prior to execution of 'swebench.harness.run_evaluation'; this may result in unpredictable behaviour
-2026-10-16 00:57:09,282 - httpx2 - INFO - HTTP Request: GET https://huggingface.co/api/agent-harnesses "HTTP/1.1 200 OK"
-2026-10-16 00:57:09,335 - httpx2 - INFO - HTTP Request: HEAD https://huggingface.co/datasets/princeton-nlp/SWE-bench_Verified/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
+2026-10-16 01:26:59,785 - httpx2 - INFO - HTTP Request: GET https://huggingface.co/api/agent-harnesses "HTTP/1.1 200 OK"
+2026-10-16 01:26:59,855 - httpx2 - INFO - HTTP Request: HEAD https://huggingface.co/datasets/princeton-nlp/SWE-bench_Verified/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
 Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
-2026-10-16 00:57:09,336 - huggingface_hub.utils._http - WARNING - Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
-2026-10-16 00:57:09,349 - httpx2 - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/datasets/princeton-nlp/SWE-bench_Verified/c104f840cc67f8b6eec6f759ebc8b2693d585d4a/README.md?%2Fdatasets%2Fprinceton-nlp%2FSWE-bench_Verified%2Fresolve%2Fmain%2FREADME.md=&etag=%22f362a6ce9579a3ee1922e3402463feef139b7d00%22 "HTTP/1.1 200 OK"
-2026-10-16 00:57:09,366 - httpx2 - INFO - HTTP Request: GET https://huggingface.co/api/resolve-cache/datasets/princeton-nlp/SWE-bench_Verified/c104f840cc67f8b6eec6f759ebc8b2693d585d4a/README.md?%2Fdatasets%2Fprinceton-nlp%2FSWE-bench_Verified%2Fresolve%2Fmain%2FREADME.md=&etag=%22f362a6ce9579a3ee1922e3402463feef139b7d00%22 "HTTP/1.1 200 OK"
-2026-10-16 00:57:09,426 - httpx2 - INFO - HTTP Request: HEAD https://huggingface.co/datasets/princeton-nlp/SWE-bench_Verified/resolve/c104f840cc67f8b6eec6f759ebc8b2693d585d4a/SWE-bench_Verified.py "HTTP/1.1 404 Not Found"
-2026-10-16 00:57:09,619 - httpx2 - INFO - HTTP Request: HEAD https://s3.amazonaws.com/datasets.huggingface.co/datasets/datasets/princeton-nlp/SWE-bench_Verified/princeton-nlp/SWE-bench_Verified.py "HTTP/1.1 404 Not Found"
-2026-10-16 00:57:09,839 - httpx2 - INFO - HTTP Request: GET https://huggingface.co/api/datasets/princeton-nlp/SWE-bench_Verified/revision/c104f840cc67f8b6eec6f759ebc8b2693d585d4a "HTTP/1.1 200 OK"
-2026-10-16 00:57:09,899 - httpx2 - INFO - HTTP Request: HEAD https://huggingface.co/datasets/princeton-nlp/SWE-bench_Verified/resolve/c104f840cc67f8b6eec6f759ebc8b2693d585d4a/.huggingface.yaml "HTTP/1.1 404 Not Found"
-2026-10-16 00:57:10,070 - httpx2 - INFO - HTTP Request: GET https://datasets-server.huggingface.co/info?dataset=princeton-nlp/SWE-bench_Verified "HTTP/1.1 200 OK"
-2026-10-16 00:57:10,130 - httpx2 - INFO - HTTP Request: GET https://huggingface.co/api/datasets/princeton-nlp/SWE-bench_Verified/tree/c104f840cc67f8b6eec6f759ebc8b2693d585d4a/data?recursive=true&expand=false "HTTP/1.1 200 OK"
-2026-10-16 00:57:10,186 - httpx2 - INFO - HTTP Request: GET https://huggingface.co/api/datasets/princeton-nlp/SWE-bench_Verified/tree/c104f840cc67f8b6eec6f759ebc8b2693d585d4a?recursive=false&expand=false "HTTP/1.1 200 OK"
-2026-10-16 00:57:10,240 - httpx2 - INFO - HTTP Request: HEAD https://huggingface.co/datasets/princeton-nlp/SWE-bench_Verified/resolve/c104f840cc67f8b6eec6f759ebc8b2693d585d4a/dataset_infos.json "HTTP/1.1 404 Not Found"
-2026-10-16 00:57:10,297 - httpx2 - INFO - HTTP Request: HEAD https://huggingface.co/datasets/princeton-nlp/SWE-bench_Verified/resolve/c104f840cc67f8b6eec6f759ebc8b2693d585d4a/data/test-00000-of-00001.parquet "HTTP/1.1 302 Found"
-2026-10-16 00:57:10,354 - httpx2 - INFO - HTTP Request: GET https://huggingface.co/api/datasets/princeton-nlp/SWE-bench_Verified/xet-read-token/c104f840cc67f8b6eec6f759ebc8b2693d585d4a "HTTP/1.1 200 OK"
-Generating test split:   0%|          | 0/500 [00:00<?, ? examples/s]Generating test split: 100%|██████████| 500/500 [00:00<00:00, 46987.63 examples/s]
-2026-10-16 00:57:11,338 - httpx2 - INFO - HTTP Request: HEAD https://huggingface.co/datasets/princeton-nlp/SWE-bench_Verified/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
-2026-10-16 00:57:11,352 - httpx2 - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/datasets/princeton-nlp/SWE-bench_Verified/c104f840cc67f8b6eec6f759ebc8b2693d585d4a/README.md?%2Fdatasets%2Fprinceton-nlp%2FSWE-bench_Verified%2Fresolve%2Fmain%2FREADME.md=&etag=%22f362a6ce9579a3ee1922e3402463feef139b7d00%22 "HTTP/1.1 200 OK"
-2026-10-16 00:57:11,407 - httpx2 - INFO - HTTP Request: HEAD https://huggingface.co/datasets/princeton-nlp/SWE-bench_Verified/resolve/c104f840cc67f8b6eec6f759ebc8b2693d585d4a/SWE-bench_Verified.py "HTTP/1.1 404 Not Found"
-2026-10-16 00:57:11,454 - httpx2 - INFO - HTTP Request: HEAD https://s3.amazonaws.com/datasets.huggingface.co/datasets/datasets/princeton-nlp/SWE-bench_Verified/princeton-nlp/SWE-bench_Verified.py "HTTP/1.1 404 Not Found"
-2026-10-16 00:57:11,511 - httpx2 - INFO - HTTP Request: HEAD https://huggingface.co/datasets/princeton-nlp/SWE-bench_Verified/resolve/c104f840cc67f8b6eec6f759ebc8b2693d585d4a/.huggingface.yaml "HTTP/1.1 404 Not Found"
-2026-10-16 00:57:11,580 - httpx2 - INFO - HTTP Request: GET https://datasets-server.huggingface.co/info?dataset=princeton-nlp/SWE-bench_Verified "HTTP/1.1 200 OK"
-2026-10-16 00:57:11,635 - httpx2 - INFO - HTTP Request: HEAD https://huggingface.co/datasets/princeton-nlp/SWE-bench_Verified/resolve/c104f840cc67f8b6eec6f759ebc8b2693d585d4a/dataset_infos.json "HTTP/1.1 404 Not Found"
-No instances to run.
+2026-10-16 01:26:59,855 - huggingface_hub.utils._http - WARNING - Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-10-16 01:26:59,861 - httpx2 - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/datasets/princeton-nlp/SWE-bench_Verified/c104f840cc67f8b6eec6f759ebc8b2693d585d4a/README.md?%2Fdatasets%2Fprinceton-nlp%2FSWE-bench_Verified%2Fresolve%2Fmain%2FREADME.md=&etag=%22f362a6ce9579a3ee1922e3402463feef139b7d00%22 "HTTP/1.1 200 OK"
+2026-10-16 01:26:59,867 - httpx2 - INFO - HTTP Request: GET https://huggingface.co/api/resolve-cache/datasets/princeton-nlp/SWE-bench_Verified/c104f840cc67f8b6eec6f759ebc8b2693d585d4a/README.md?%2Fdatasets%2Fprinceton-nlp%2FSWE-bench_Verified%2Fresolve%2Fmain%2FREADME.md=&etag=%22f362a6ce9579a3ee1922e3402463feef139b7d00%22 "HTTP/1.1 200 OK"
+2026-10-16 01:26:59,936 - httpx2 - INFO - HTTP Request: HEAD https://huggingface.co/datasets/princeton-nlp/SWE-bench_Verified/resolve/c104f840cc67f8b6eec6f759ebc8b2693d585d4a/SWE-bench_Verified.py "HTTP/1.1 404 Not Found"
+2026-10-16 01:27:00,140 - httpx2 - INFO - HTTP Request: HEAD https://s3.amazonaws.com/datasets.huggingface.co/datasets/datasets/princeton-nlp/SWE-bench_Verified/princeton-nlp/SWE-bench_Verified.py "HTTP/1.1 404 Not Found"
+2026-10-16 01:27:00,337 - httpx2 - INFO - HTTP Request: GET https://huggingface.co/api/datasets/princeton-nlp/SWE-bench_Verified/revision/c104f840cc67f8b6eec6f759ebc8b2693d585d4a "HTTP/1.1 200 OK"
+2026-10-16 01:27:00,406 - httpx2 - INFO - HTTP Request: HEAD https://huggingface.co/datasets/princeton-nlp/SWE-bench_Verified/resolve/c104f840cc67f8b6eec6f759ebc8b2693d585d4a/.huggingface.yaml "HTTP/1.1 404 Not Found"
+2026-10-16 01:27:00,555 - httpx2 - INFO - HTTP Request: GET https://datasets-server.huggingface.co/info?dataset=princeton-nlp/SWE-bench_Verified "HTTP/1.1 200 OK"
+2026-10-16 01:27:00,626 - httpx2 - INFO - HTTP Request: GET https://huggingface.co/api/datasets/princeton-nlp/SWE-bench_Verified/tree/c104f840cc67f8b6eec6f759ebc8b2693d585d4a/data?recursive=true&expand=false "HTTP/1.1 200 OK"
+2026-10-16 01:27:00,695 - httpx2 - INFO - HTTP Request: GET https://huggingface.co/api/datasets/princeton-nlp/SWE-bench_Verified/tree/c104f840cc67f8b6eec6f759ebc8b2693d585d4a?recursive=false&expand=false "HTTP/1.1 200 OK"
+2026-10-16 01:27:00,763 - httpx2 - INFO - HTTP Request: HEAD https://huggingface.co/datasets/princeton-nlp/SWE-bench_Verified/resolve/c104f840cc67f8b6eec6f759ebc8b2693d585d4a/dataset_infos.json "HTTP/1.1 404 Not Found"
+2026-10-16 01:27:00,836 - httpx2 - INFO - HTTP Request: HEAD https://huggingface.co/datasets/princeton-nlp/SWE-bench_Verified/resolve/c104f840cc67f8b6eec6f759ebc8b2693d585d4a/data/test-00000-of-00001.parquet "HTTP/1.1 302 Found"
+2026-10-16 01:27:00,906 - httpx2 - INFO - HTTP Request: GET https://huggingface.co/api/datasets/princeton-nlp/SWE-bench_Verified/xet-read-token/c104f840cc67f8b6eec6f759ebc8b2693d585d4a "HTTP/1.1 200 OK"
+Generating test split:   0%|          | 0/500 [00:00<?, ? examples/s]Generating test split: 100%|██████████| 500/500 [00:00<00:00, 43874.39 examples/s]
+2026-10-16 01:27:01,912 - httpx2 - INFO - HTTP Request: HEAD https://huggingface.co/datasets/princeton-nlp/SWE-bench_Verified/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
+2026-10-16 01:27:01,920 - httpx2 - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/datasets/princeton-nlp/SWE-bench_Verified/c104f840cc67f8b6eec6f759ebc8b2693d585d4a/README.md?%2Fdatasets%2Fprinceton-nlp%2FSWE-bench_Verified%2Fresolve%2Fmain%2FREADME.md=&etag=%22f362a6ce9579a3ee1922e3402463feef139b7d00%22 "HTTP/1.1 200 OK"
+2026-10-16 01:27:01,988 - httpx2 - INFO - HTTP Request: HEAD https://huggingface.co/datasets/princeton-nlp/SWE-bench_Verified/resolve/c104f840cc67f8b6eec6f759ebc8b2693d585d4a/SWE-bench_Verified.py "HTTP/1.1 404 Not Found"
+2026-10-16 01:27:02,053 - httpx2 - INFO - HTTP Request: HEAD https://s3.amazonaws.com/datasets.huggingface.co/datasets/datasets/princeton-nlp/SWE-bench_Verified/princeton-nlp/SWE-bench_Verified.py "HTTP/1.1 404 Not Found"
+2026-10-16 01:27:02,134 - httpx2 - INFO - HTTP Request: HEAD https://huggingface.co/datasets/princeton-nlp/SWE-bench_Verified/resolve/c104f840cc67f8b6eec6f759ebc8b2693d585d4a/.huggingface.yaml "HTTP/1.1 404 Not Found"
+2026-10-16 01:27:02,213 - httpx2 - INFO - HTTP Request: GET https://datasets-server.huggingface.co/info?dataset=princeton-nlp/SWE-bench_Verified "HTTP/1.1 200 OK"
+2026-10-16 01:27:02,284 - httpx2 - INFO - HTTP Request: HEAD https://huggingface.co/datasets/princeton-nlp/SWE-bench_Verified/resolve/c104f840cc67f8b6eec6f759ebc8b2693d585d4a/dataset_infos.json "HTTP/1.1 404 Not Found"
+Found 1 existing instance images. Will reuse them.
+Running 1 instances...
+Evaluation:   0%|          | 0/1 [00:00<?, ?it/s, error=0, ✓=0, ✖=0]Evaluation:   0%|          | 0/1 [00:55<?, ?it/s, ✓=0, ✖=1, error=0]Evaluation: 100%|██████████| 1/1 [00:55<00:00, 55.94s/it, ✓=0, ✖=1, error=0]Evaluation: 100%|██████████| 1/1 [00:55<00:00, 55.94s/it, ✓=0, ✖=1, error=0]
+All instances run.
 Cleaning cached images...
 Removed 0 images.
 Total instances: 1
 Instances submitted: 1
-Instances completed: 0
+Instances completed: 1
 Instances incomplete: 0
 Instances resolved: 0
-Instances unresolved: 0
-Instances with empty patches: 1
+Instances unresolved: 1
+Instances with empty patches: 0
 Instances with errors: 0
 Unstopped containers: 1
 Unremoved images: 1

@@ -1,0 +1,56 @@
+diff --git a/tests/test_models/test_one_model_ordering.py b/tests/test_models/test_one_model_ordering.py
+new file mode 100644
+index 0000000000..ca059d3778
+--- /dev/null
++++ b/tests/test_models/test_one_model_ordering.py
+@@ -0,0 +1,49 @@
++from django.test import TestCase
++from .models import OneModel, TwoModel
++
++class OneModelOrderingTest(TestCase):
++    def setUp(self):
++        # テスト用のデータをセットアップ
++        self.one_model_1 = OneModel.objects.create(oneval=1)
++        self.one_model_2 = OneModel.objects.create(oneval=2)
++        self.one_model_3 = OneModel.objects.create(oneval=3)
++
++        self.two_model_1 = TwoModel.objects.create(record=self.one_model_1, twoval=10)
++        self.two_model_2 = TwoModel.objects.create(record=self.one_model_2, twoval=20)
++        self.two_model_3 = TwoModel.objects.create(record=self.one_model_3, twoval=30)
++
++    def test_ordering_with_default_ordering(self):
++        # OneModelのデフォルトのorderingは (-id,)
++        # TwoModel.objects.filter(record__oneval__in=[1,2,3])
++        # qs.order_by("record__root_id") は OneModel.id の昇順でソートされることを期待する
++        qs = TwoModel.objects.filter(record__oneval__in=[1,2,3])
++        qs = qs.order_by("record__root_id")
++        
++        # 期待される結果: root_id (OneModel.id) の昇順でソートされる
++        expected_ids = [self.one_model_1.id, self.one_model_2.id, self.one_model_3.id]
++        actual_ids = [item.record.id for item in qs]
++        
++        self.assertEqual(actual_ids, expected_ids)
++
++    def test_ordering_with_descending_ordering(self):
++        # 問題の核心: order_by("-record__root_id") が意図しない結果を生成する可能性がある
++        qs = TwoModel.objects.filter(record__oneval__in=[1,2,3])
++        qs = qs.order_by("-record__root_id")
++        
++        # 期待される結果: root_id (OneModel.id) の降順でソートされる
++        expected_ids = [self.one_model_3.id, self.one_model_2.id, self.one_model_1.id]
++        actual_ids = [item.record.id for item in qs]
++        
++        self.assertEqual(actual_ids, expected_ids)
++
++    def test_ordering_with_annotate(self):
++        # annotateを使った方法が正しく動作するか確認
++        qs = TwoModel.objects.filter(record__oneval__in=[1,2,3])
++        qs = qs.annotate(root_id=models.F("record__root_id"))
++        qs = qs.order_by("root_id")
++        
++        # 期待される結果: root_id の昇順でソートされる
++        expected_ids = [self.one_model_1.id, self.one_model_2.id, self.one_model_3.id]
++        actual_ids = [item.root_id for item in qs]
++        
++        self.assertEqual(actual_ids, expected_ids)
+\ No newline at end of file
