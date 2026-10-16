@@ -1,7 +1,7 @@
 # Verified coding-task trajectories (write -> test -> [fail -> fix] -> honest report) from MBPP; tool outputs come from real execution.
 import sys, os, re, json, random, subprocess, tempfile, shutil
 from datasets import load_dataset
-out = sys.argv[1]
+out = sys.argv[1]; SH, NS = int(sys.argv[2]), int(sys.argv[3])
 TOOLRUN = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'runner', 'toolrun_ctr.py')
 ds = load_dataset('mbpp', 'full')
 rows = [r for sp in ('train', 'validation', 'prompt', 'test') for r in ds[sp]]
@@ -26,6 +26,7 @@ PLAN_EN = ['Write the function to solution.py.', 'Write the example asserts to t
 n = 0; rng0 = random.Random(7)
 with open(out, 'w') as f:
     for r in rows:
+        if r['task_id'] % NS != SH: continue
         rng = random.Random(r['task_id'])
         code = r['code'].replace('\r\n', '\n').strip() + '\n'; tl = [t.strip() for t in r['test_list']]
         setup = (r.get('test_setup_code') or '').strip()

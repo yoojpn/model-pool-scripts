@@ -8,14 +8,18 @@ permissions:
 jobs:
   mbpp:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
     steps:
       - uses: actions/checkout@v4
       - run: pip install datasets
       - run: |
           mkdir -p data2
-          python train/gen_mbpp.py data2/mbpp.jsonl 2>&1 | tail -5
-          gzip -f data2/mbpp.jsonl
+          python train/gen_mbpp.py data2/mbpp_${{ matrix.shard }}.jsonl ${{ matrix.shard }} 12 2>&1 | tail -3
+          gzip -f data2/mbpp_${{ matrix.shard }}.jsonl
           git config user.name swe-runner; git config user.email swe@example.invalid
-          git add data2; git commit -qm "mbpp trajectories" || true
-          for i in 1 2 3; do git pull -q --rebase origin ${{ github.ref_name }} && git push -q origin HEAD:${{ github.ref_name }} && break; sleep 5; done
+          git add data2/mbpp_${{ matrix.shard }}.jsonl.gz; git commit -qm "mbpp shard ${{ matrix.shard }}" || true
+          for i in 1 2 3 4 5 6; do git pull -q --rebase origin ${{ github.ref_name }} && git push -q origin HEAD:${{ github.ref_name }} && break; sleep $((RANDOM%8+2)); done
