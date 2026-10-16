@@ -1,4 +1,0 @@
-04:06:45 job started
-04:07:19 container ready
-04:07:23 solve done
-04:07:25 eval done
