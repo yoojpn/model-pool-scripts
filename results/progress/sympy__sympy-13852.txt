@@ -1,2 +1,3 @@
 04:36:00 job started
 04:36:43 container ready
+04:38:31 solve done
