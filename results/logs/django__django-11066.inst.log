@@ -1,0 +1,36 @@
+igrations.RunPython):
+         else:
+             content_type.model = new_model
+             try:
+-                with transaction.atomic(using=db):
+-                    content_type.save(update_fields={'model'})
++                with transaction.atomic(using=db): 
++                	content_type.save(using=db, update_fields={'model'})
+             except IntegrityError:
+                 # Gracefully fallback if a stale content type causes a
+                 # conflict as remove_stale_contenttypes will take care of
+2026-10-16 01:00:12,673 - INFO - Eval script for django__django-11066 written to logs/run_evaluation/r/gemma4-e2b-agent/django__django-11066/eval.sh; copying to container...
+2026-10-16 01:00:18,326 - INFO - Test runtime: 5.62 seconds
+2026-10-16 01:00:18,326 - INFO - Test output for django__django-11066 written to logs/run_evaluation/r/gemma4-e2b-agent/django__django-11066/test_output.txt
+2026-10-16 01:00:18,381 - INFO - Git diff after:
+diff --git a/django/contrib/contenttypes/management/__init__.py b/django/contrib/contenttypes/management/__init__.py
+index 2b5f688136..16727bea3d 100644
+--- a/django/contrib/contenttypes/management/__init__.py
++++ b/django/contrib/contenttypes/management/__init__.py
+@@ -23,8 +23,8 @@ class RenameContentType(migrations.RunPython):
+         else:
+             content_type.model = new_model
+             try:
+-                with transaction.atomic(using=db):
+-                    content_type.save(update_fields={'model'})
++                with transaction.atomic(using=db): 
++                	content_type.save(using=db, update_fields={'model'})
+             except IntegrityError:
+                 # Gracefully fallback if a stale content type causes a
+                 # conflict as remove_stale_contenttypes will take care of
+2026-10-16 01:00:18,381 - INFO - Grading answer for django__django-11066...
+2026-10-16 01:00:18,382 - INFO - report: {'django__django-11066': {'patch_is_None': False, 'patch_exists': True, 'patch_successfully_applied': True, 'resolved': True, 'tests_status': {'FAIL_TO_PASS': {'success': ['test_existing_content_type_rename_other_database (contenttypes_tests.test_operations.ContentTypeOperationsTests)'], 'failure': []}, 'PASS_TO_PASS': {'success': ['test_content_type_rename_conflict (contenttypes_tests.test_operations.ContentTypeOperationsTests)', 'test_existing_content_type_rename (contenttypes_tests.test_operations.ContentTypeOperationsTests)', 'test_missing_content_type_rename_ignore (contenttypes_tests.test_operations.ContentTypeOperationsTests)'], 'failure': []}, 'FAIL_TO_FAIL': {'success': [], 'failure': []}, 'PASS_TO_FAIL': {'success': [], 'failure': []}}}}
+Result for django__django-11066: resolved: True
+2026-10-16 01:00:18,383 - INFO - Attempting to stop container sweb.eval.django__django-11066.r...
+2026-10-16 01:00:33,495 - INFO - Attempting to remove container sweb.eval.django__django-11066.r...
+2026-10-16 01:00:33,540 - INFO - Container sweb.eval.django__django-11066.r removed.
