@@ -6,6 +6,16 @@ on:
 permissions:
   contents: write
 jobs:
+  start:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          echo "started $(date -u) run ${{ github.run_id }}" > results/started.txt
+          git config user.name swe-runner; git config user.email swe@example.invalid
+          git add results/started.txt; git commit -qm "started ${{ github.run_id }}"
+          git pull -q --rebase origin ${{ github.ref_name }} || true
+          git push -q origin HEAD:${{ github.ref_name }}
   select:
     runs-on: ubuntu-latest
     outputs:
