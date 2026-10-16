@@ -3,7 +3,7 @@ import sys, os, re, json, random, subprocess, tempfile, shutil
 from datasets import load_dataset
 out = sys.argv[1]; SH, NS = int(sys.argv[2]), int(sys.argv[3])
 TOOLRUN = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'runner', 'toolrun_ctr.py')
-ds = load_dataset('mbpp', 'full')
+ds = load_dataset('google-research-datasets/mbpp', 'full')
 rows = [r for sp in ('train', 'validation', 'prompt', 'test') for r in ds[sp]]
 J = lambda o: json.dumps(o, ensure_ascii=False, separators=(',', ':'))
 def tool(ws, name, args):

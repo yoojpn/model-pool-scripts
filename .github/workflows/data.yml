@@ -18,8 +18,8 @@ jobs:
       - run: pip install datasets
       - run: |
           mkdir -p data2
-          python train/gen_mbpp.py data2/mbpp_${{ matrix.shard }}.jsonl ${{ matrix.shard }} 12 2>&1 | tail -3
+          python train/gen_mbpp.py data2/mbpp_${{ matrix.shard }}.jsonl ${{ matrix.shard }} 12 > data2/log_${{ matrix.shard }}.txt 2>&1 || true; tail -3 data2/log_${{ matrix.shard }}.txt; touch data2/mbpp_${{ matrix.shard }}.jsonl
           gzip -f data2/mbpp_${{ matrix.shard }}.jsonl
           git config user.name swe-runner; git config user.email swe@example.invalid
-          git add data2/mbpp_${{ matrix.shard }}.jsonl.gz; git commit -qm "mbpp shard ${{ matrix.shard }}" || true
+          git add data2/mbpp_${{ matrix.shard }}.jsonl.gz data2/log_${{ matrix.shard }}.txt; git commit -qm "mbpp shard ${{ matrix.shard }}" || true
           for i in 1 2 3 4 5 6; do git pull -q --rebase origin ${{ github.ref_name }} && git push -q origin HEAD:${{ github.ref_name }} && break; sleep $((RANDOM%8+2)); done
