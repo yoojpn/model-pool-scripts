@@ -120,7 +120,7 @@ jobs:
           print(sum(r['resolved'] for r in rows),'/',len(rows))
           PY
           git config user.name swe-runner; git config user.email swe@example.invalid
-          mkdir -p results/logs; for d in all/res-*; do i=${d#all/res-}; cp $d/eval.log results/logs/$i.eval.log 2>/dev/null; tail -c 3000 $d/run_instance.log > results/logs/$i.inst.log 2>/dev/null; done
+          mkdir -p results/logs; for d in all/res-*; do i=${d#all/res-}; cp $d/eval.log results/logs/$i.eval.log 2>/dev/null || true; tail -c 3000 $d/run_instance.log > results/logs/$i.inst.log 2>/dev/null || true; done
           git add results; git commit -qm "results ${{ github.run_id }}" || true
           git pull -q --rebase origin ${{ github.ref_name }} || true
           git push -q origin HEAD:${{ github.ref_name }}
