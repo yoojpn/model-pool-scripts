@@ -3,3 +3,4 @@
 04:06:07 solve done
 04:06:08 eval done
 04:14:53 job started
+04:15:36 container ready
