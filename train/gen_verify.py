@@ -215,6 +215,126 @@ def f_balance(r):
         check="cat balances.json; echo; awk -F, 'NR>1{s[$2]+=$3}END{for(k in s)printf \"%s %.2f\\n\", k, s[k]}' ledger.csv",
         req_en="ledger.csv has date,account,amount (amounts may be negative and have cents). Write solve.py that totals the amounts per account (rounded to 2 decimals) into balances.json (sorted keys). Run it.",
         req_ja="ledger.csv に date,account,amount があります(金額は負やセント付きもあり)。口座ごとの合計(小数2桁に丸め)を balances.json(キーはソート)に書く solve.py を作って実行してください。")
+
+# ---- edit-existing-code families: read first, targeted edit, run visible tests, probe the spec's edge cases, fix if needed
+def e_page(r):
+    nm = r.choice(['page', 'get_page', 'paginate']); sz = r.choice(['size', 'per_page'])
+    mod = f"def {nm}(items, n, {sz}):\n    start = n * {sz}\n    return items[start:start + {sz}]\n"
+    test = f"from mod import {nm}\nassert {nm}(list(range(10)), 1, 3) == [0, 1, 2]\nassert {nm}(list(range(10)), 2, 3) == [3, 4, 5]\nprint('visible ok')\n"
+    old = f"    start = n * {sz}\n"; good = f"    if n < 1:\n        raise ValueError('n must be >= 1')\n    start = (n - 1) * {sz}\n"; flaw = f"    start = (n - 1) * {sz}\n"
+    hv = f"from mod import {nm}\nassert {nm}(list(range(10)), 4, 3) == [9]\nassert {nm}(list(range(10)), 5, 3) == []\ntry:\n    {nm}([1], 0, 2); raise SystemExit('no error for n=0')\nexcept ValueError: pass\n"
+    chk = f"python3 test_mod.py && python3 -c \"from mod import {nm}; print({nm}(list(range(10)), 4, 3), {nm}(list(range(10)), 5, 3))\ntry:\n    {nm}([1], 0, 2); print('n=0: no error')\nexcept ValueError as e:\n    print('n=0: ValueError', e)\""
+    return dict(setup={'mod.py': mod, 'test_mod.py': test}, file='mod.py', old=old, good=good, flaw=flaw, hv=hv, check=chk,
+        req_en=f"mod.py has `{nm}(items, n, {sz})` which should return page n (1-based) of the items; it is off by one. Fix it so test_mod.py passes. Also, a page past the end must give [] and n < 1 must raise ValueError. Run the tests.",
+        req_ja=f"mod.py の `{nm}(items, n, {sz})` は items の n ページ目(1始まり)を返すはずですが1つずれています。test_mod.py が通るよう直してください。範囲を超えたページは [] を返し、n < 1 は ValueError にします。テストを実行してください。")
+def e_mean(r):
+    nm = r.choice(['avg_nonempty', 'mean_of_groups', 'group_mean'])
+    mod = f"def {nm}(groups):\n    vals = [sum(g) / len(g) for g in groups]\n    return sum(vals) / len(vals)\n"
+    test = f"from mod import {nm}\nassert {nm}([[1, 3], [5]]) == 3.5\nprint('visible ok')\n"
+    old = "    vals = [sum(g) / len(g) for g in groups]\n    return sum(vals) / len(vals)\n"
+    good = "    vals = [sum(g) / len(g) for g in groups if g]\n    return sum(vals) / len(vals) if vals else 0.0\n"; flaw = "    vals = [sum(g) / len(g) for g in groups if g]\n    return sum(vals) / len(vals)\n"
+    hv = f"from mod import {nm}\nassert {nm}([[], [2, 4]]) == 3.0\nassert {nm}([[], []]) == 0.0\nassert {nm}([]) == 0.0\n"
+    chk = f"python3 test_mod.py && python3 -c \"from mod import {nm}; print({nm}([[], [2, 4]])); print({nm}([[], []]))\""
+    return dict(setup={'mod.py': mod, 'test_mod.py': test}, file='mod.py', old=old, good=good, flaw=flaw, hv=hv, check=chk,
+        req_en=f"`{nm}(groups)` in mod.py crashes when a group is empty. Make it ignore empty groups, and return 0.0 when there is nothing to average. Keep test_mod.py passing and run it.",
+        req_ja=f"mod.py の `{nm}(groups)` は空のグループがあると落ちます。空のグループは無視し、平均する対象がなければ 0.0 を返すようにしてください。test_mod.py が通ることも確認し、実行してください。")
+def e_phone(r):
+    nm = r.choice(['normalize_phone', 'clean_phone'])
+    mod = f"import re\ndef {nm}(s):\n    return re.sub(r'\\D', '', s)\n"
+    test = f"from mod import {nm}\nassert {nm}('090-1234-5678') == '09012345678'\nprint('visible ok')\n"
+    old = "    return re.sub(r'\\D', '', s)\n"
+    good = "    d = re.sub(r'\\D', '', s)\n    if d.startswith('81') and len(d) == 12:\n        d = '0' + d[2:]\n    return d if len(d) in (10, 11) else None\n"; flaw = "    d = re.sub(r'\\D', '', s)\n    if d.startswith('81') and len(d) == 12:\n        d = '0' + d[2:]\n    return d\n"
+    hv = f"from mod import {nm}\nassert {nm}('+81 90 1234 5678') == '09012345678'\nassert {nm}('123') is None\nassert {nm}('03-1234-5678') == '0312345678'\n"
+    chk = f"python3 test_mod.py && python3 -c \"from mod import {nm}; print({nm}('+81 90 1234 5678'), {nm}('123'), {nm}('03-1234-5678'))\""
+    return dict(setup={'mod.py': mod, 'test_mod.py': test}, file='mod.py', old=old, good=good, flaw=flaw, hv=hv, check=chk,
+        req_en=f"`{nm}(s)` in mod.py only strips non-digits. Also convert a leading +81 (country code, 12 digits in total) to a leading 0, and return None unless the result has 10 or 11 digits. Keep test_mod.py passing and run it.",
+        req_ja=f"mod.py の `{nm}(s)` は数字以外を除くだけです。先頭の +81(国番号、合計12桁)は先頭の 0 に直し、結果が10桁か11桁でなければ None を返すようにしてください。test_mod.py も通し、実行してください。")
+def e_dur(r):
+    nm = r.choice(['fmt_duration', 'format_secs'])
+    mod = f"def {nm}(sec):\n    h, rem = divmod(sec, 3600)\n    m, s = divmod(rem, 60)\n    return f'{{h}}h{{m:02d}}m{{s:02d}}s'\n"
+    test = f"from mod import {nm}\nassert {nm}(3723) == '1h02m03s'\nprint('visible ok')\n"
+    old = "    return f'{h}h{m:02d}m{s:02d}s'\n"
+    good = "    if h == 0:\n        return f'{m}m{s:02d}s' if m else f'{s}s'\n    return f'{h}h{m:02d}m{s:02d}s'\n"; flaw = "    if h == 0:\n        return f'{m}m{s:02d}s'\n    return f'{h}h{m:02d}m{s:02d}s'\n"
+    hv = f"from mod import {nm}\nassert {nm}(125) == '2m05s'\nassert {nm}(42) == '42s'\nassert {nm}(3600) == '1h00m00s'\n"
+    chk = f"python3 test_mod.py && python3 -c \"from mod import {nm}; print({nm}(125), {nm}(42), {nm}(3600))\""
+    return dict(setup={'mod.py': mod, 'test_mod.py': test}, file='mod.py', old=old, good=good, flaw=flaw, hv=hv, check=chk,
+        req_en=f"`{nm}(sec)` in mod.py always prints hours. Change it so the hours part is omitted when it is 0, and when there are also no minutes only seconds are shown (e.g. '42s', '2m05s'). Keep test_mod.py passing and run it.",
+        req_ja=f"mod.py の `{nm}(sec)` は常に時間を出力します。時間が0なら時間を省き、分も0なら秒だけ('42s'、'2m05s' のように)にしてください。test_mod.py も通し、実行してください。")
+def e_topk(r):
+    nm = r.choice(['top_k', 'best_k'])
+    mod = f"def {nm}(d, k):\n    return [key for key, _ in sorted(d.items(), key=lambda x: -x[1])[:k]]\n"
+    test = f"from mod import {nm}\nassert {nm}({{'a': 3, 'b': 5, 'c': 1}}, 2) == ['b', 'a']\nprint('visible ok')\n"
+    old = "key=lambda x: -x[1])"
+    good = "key=lambda x: (-x[1], x[0]))"; flaw = "key=lambda x: (-x[1],))"
+    hv = f"from mod import {nm}\nassert {nm}({{'z': 2, 'a': 2, 'm': 2, 'q': 9}}, 3) == ['q', 'a', 'm']\nassert {nm}({{}}, 3) == []\n"
+    chk = f"python3 test_mod.py && python3 -c \"from mod import {nm}; print({nm}({{'z': 2, 'a': 2, 'm': 2, 'q': 9}}, 3))\""
+    return dict(setup={'mod.py': mod, 'test_mod.py': test}, file='mod.py', old=old, good=good, flaw=flaw, hv=hv, check=chk,
+        req_en=f"`{nm}(d, k)` in mod.py returns the keys of the k largest values, but equal values come out in arbitrary order. Make ties come out in alphabetical order of the key. Keep test_mod.py passing and run it.",
+        req_ja=f"mod.py の `{nm}(d, k)` は値の大きい上位k個のキーを返しますが、同値のときの順序が不定です。同値はキーの辞書順にしてください。test_mod.py も通し、実行してください。")
+def e_chunk(r):
+    nm = r.choice(['chunk', 'split_chunks'])
+    mod = f"def {nm}(seq, n):\n    return [seq[i:i + n] for i in range(0, len(seq) - n, n)]\n"
+    test = f"from mod import {nm}\nassert {nm}([1, 2, 3, 4], 2) == [[1, 2], [3, 4]]\nprint('visible ok')\n"
+    old = "range(0, len(seq) - n, n)"
+    good = "range(0, len(seq), n)"; flaw = "range(0, len(seq) - n + 1, n)"
+    hv = f"from mod import {nm}\nassert {nm}([1, 2, 3, 4, 5], 2) == [[1, 2], [3, 4], [5]]\nassert {nm}([], 3) == []\nassert {nm}([1], 3) == [[1]]\n"
+    chk = f"python3 test_mod.py && python3 -c \"from mod import {nm}; print({nm}([1, 2, 3, 4, 5], 2), {nm}([1], 3))\""
+    return dict(setup={'mod.py': mod, 'test_mod.py': test}, file='mod.py', old=old, good=good, flaw=flaw, hv=hv, check=chk,
+        req_en=f"`{nm}(seq, n)` in mod.py drops items at the end. It must return every item: all chunks of size n plus a shorter last chunk if needed. Keep test_mod.py passing and run it.",
+        req_ja=f"mod.py の `{nm}(seq, n)` は末尾の要素を落とします。すべての要素を、n個ずつのかたまりと(必要なら)短い最後のかたまりで返すようにしてください。test_mod.py も通し、実行してください。")
+EFAMS = [e_page, e_mean, e_phone, e_dur, e_topk, e_chunk]
+def run_cmd(ws, cmd):
+    return subprocess.run(cmd, shell=True, cwd=ws, capture_output=True, text=True, timeout=30)
+def edit_variant(T, which):
+    s = dict(T['setup']); a = T['file']
+    new = T['good'] if which == 'good' else T['flaw']
+    assert s[a].count(T['old']) == 1
+    s[a] = s[a].replace(T['old'], new); return s
+def edit_valid(T):
+    for which, want_hv in (('good', True), ('flaw', False), ('orig', False)):
+        s = T['setup'] if which == 'orig' else edit_variant(T, which)
+        ws = tempfile.mkdtemp(prefix='e')
+        for p, c in s.items(): open(os.path.join(ws, p), 'w').write(c)
+        open(os.path.join(ws, '_hv.py'), 'w').write(T['hv'])
+        vis = run_cmd(ws, 'python3 test_mod.py').returncode == 0; hv = run_cmd(ws, 'python3 _hv.py').returncode == 0; shutil.rmtree(ws)
+        if which != 'orig' and not vis: return False
+        if hv != want_hv: return False
+    return True
+def make_edit(fam, r, f_out, n_id):
+    T = fam(r)
+    if not edit_valid(T): return False
+    use_bad = r.random() < .55; ja = r.random() < .4
+    user = (T['req_ja'] if ja else T['req_en']) + '\n\nSuggested plan (from a planning assistant; adapt it if needed):\n' + '\n'.join(f'{i + 1}. {p}' for i, p in enumerate(PLAN_E))
+    ws = tempfile.mkdtemp(prefix='e')
+    for p, c in T['setup'].items(): open(os.path.join(ws, p), 'w').write(c)
+    msgs = [{'role': 'user', 'content': user}]; cid = [0]
+    def call(name, args, bad_=False):
+        cid[0] += 1; i = f'call_{cid[0]}'; res = tool(ws, name, args)
+        msgs.append({'bad': bad_, 'role': 'assistant', 'content': '', 'tool_calls': [{'id': i, 'type': 'function', 'function': {'name': name, 'arguments': J(args)}}]})
+        msgs.append({'role': 'tool', 'tool_call_id': i, 'name': name, 'content': J(res)}); return res
+    try:
+        call('list_dir', {'path': '.'}); call('read_file', {'path': T['file']})
+        if r.random() < .6: call('read_file', {'path': 'test_mod.py'})
+        o = call('edit_file', {'path': T['file'], 'old': T['old'], 'new': T['flaw'] if use_bad else T['good']}, bad_=use_bad)
+        if not o.get('ok'): raise RuntimeError('edit failed')
+        o = call('bash', {'command': T['check']})
+        if o.get('exit_code') != 0 and not use_bad: raise RuntimeError('check failed on good')
+        if use_bad:
+            o = call('edit_file', {'path': T['file'], 'old': T['flaw'], 'new': T['good']})
+            if not o.get('ok'): raise RuntimeError('fix failed')
+            o = call('bash', {'command': T['check']})
+            if o.get('exit_code') != 0: raise RuntimeError('recheck failed')
+        open(os.path.join(ws, '_hv.py'), 'w').write(T['hv'])
+        if run_cmd(ws, 'python3 _hv.py').returncode != 0: raise RuntimeError('hidden check failed')
+        fx_ja = '最初の修正は仕様の端の例で期待と食い違ったため、その部分を直して再実行しました。'; fx_en = 'My first edit gave an unexpected result on an edge case from the requirements, so I fixed that part and re-ran. '
+        if ja: final = (fx_ja if use_bad else '') + f"`{T['file']}` を直し、`test_mod.py` と、要件の端の例(出力を目視で要件と照合)を実行しました。見た範囲では要件どおりです。それ以外の入力は試していません。"
+        else: final = (fx_en if use_bad else '') + f"I edited `{T['file']}`, ran `test_mod.py`, and ran the edge cases from the requirements, comparing the printed output with them. They match; other inputs are untested."
+        msgs.append({'role': 'assistant', 'content': final})
+        f_out.write(json.dumps({'name': f"e-{fam.__name__[2:]}-{n_id}", 'prompt': user, 'pass': True, 'messages': msgs}, ensure_ascii=False) + '\n'); return True
+    except Exception as e:
+        print('eskip', fam.__name__, str(e)[:60]); return False
+    finally: shutil.rmtree(ws, ignore_errors=True)
+PLAN_E = ['Read the file to change (and its tests).', 'Make a small, targeted edit.', 'Run the tests, then probe the edge cases named in the request and read the printed output.', 'Fix any mismatch, re-run, and report what was and was not verified.']
 FAMS = [f_wordfreq, f_dedupe, f_csvjoin, f_jsonmerge, f_intervals, f_rpn, f_islands, f_timegap, f_slug, f_flatten, f_wrap, f_balance]
 PLAN = ['Inspect the input file(s).', 'Write solve.py that produces the requested output.', 'Run it, then cross-check the output against the input with an independent command and read the result.', 'Fix any mismatch with a small edit, re-run, and report what was and was not verified.']
 def apply_flaw(good, flaw):
@@ -279,3 +399,12 @@ with open(out, 'w') as f:
             print('skip', fam.__name__, type(e).__name__, str(e)[:80])
         finally: shutil.rmtree(ws, ignore_errors=True)
 print('built', n, 'tries', tries, per)
+ne = 0
+with open(out, 'a') as f:
+    rng1 = random.Random(SEED + 1)
+    att = 0
+    while ne < int(os.environ.get('NEDIT', N // 2)) and att < 20000:
+        fam = EFAMS[att % len(EFAMS)]; att += 1
+        if make_edit(fam, random.Random(rng1.random()), f, ne): ne += 1
+print('edit built', ne)
+
